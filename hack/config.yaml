@@ -6,3 +6,7 @@ gfcli:
     build: "-a amd64 -s linux -p temp -ew"
     tagPrefixes:
       - my.image.pub/my-app
+  gen:
+    dao:
+      - link: "	mssql:sa:qwerQWER114477114477@tcp(127.0.0.1:1433)/smart_power"
+        jsonCase: "CamelLower"
