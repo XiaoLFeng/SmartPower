@@ -1,6 +1,7 @@
 package cmd
 
 import (
+	"SmartPower/internal/config/startup"
 	"context"
 
 	"github.com/gogf/gf/v2/frame/g"
@@ -16,7 +17,13 @@ var (
 		Usage: "main",
 		Brief: "start http server",
 		Func: func(ctx context.Context, parser *gcmd.Parser) (err error) {
+			// 业务启动
 			s := g.Server()
+			// 初始化系统
+			startup.SystemDatabaseTablePreparation(ctx)
+			startup.SystemDataPreparation(ctx)
+			startup.SystemPreparationFinal(ctx)
+			// 路由表控制
 			s.Group("/", func(group *ghttp.RouterGroup) {
 				group.Middleware(ghttp.MiddlewareHandlerResponse)
 				group.Bind(
