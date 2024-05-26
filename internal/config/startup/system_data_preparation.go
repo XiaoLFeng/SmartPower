@@ -22,7 +22,7 @@ func SystemDataPreparation(ctx context.Context) {
 	prepareInfoTableData(ctx, "system_name", "SmartPower")
 	prepareInfoTableData(ctx, "system_version", "v1.0.0")
 	prepareInfoTableData(ctx, "system_author", "xiao_lfeng")
-	prepareInfoTableData(ctx, "system_description", "SmartPower 是一个智能电力管理系统")
+	prepareInfoTableData(ctx, "system_description", "一个电力管理系统")
 	prepareInfoTableData(ctx, "system_github", "https://github.com/XiaoLFeng/SmartPower")
 }
 

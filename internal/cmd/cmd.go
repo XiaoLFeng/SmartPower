@@ -22,6 +22,7 @@ var (
 			// 初始化系统
 			startup.SystemDatabaseTablePreparation(ctx)
 			startup.SystemDataPreparation(ctx)
+			startup.SystemConsolePreparation(ctx)
 			startup.SystemPreparationFinal(ctx)
 			// 路由表控制
 			s.Group("/", func(group *ghttp.RouterGroup) {
