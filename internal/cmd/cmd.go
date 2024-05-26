@@ -1,6 +1,7 @@
 package cmd
 
 import (
+	"SmartPower/internal/config/middleware"
 	"SmartPower/internal/config/startup"
 	"context"
 
@@ -26,7 +27,7 @@ var (
 			startup.SystemPreparationFinal(ctx)
 			// 路由表控制
 			s.Group("/", func(group *ghttp.RouterGroup) {
-				group.Middleware(ghttp.MiddlewareHandlerResponse)
+				group.Middleware(middleware.HandlerResponseMiddleware)
 				group.Bind(
 					hello.NewV1(),
 				)
