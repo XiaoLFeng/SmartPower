@@ -3,13 +3,12 @@ package cmd
 import (
 	"SmartPower/internal/config/middleware"
 	"SmartPower/internal/config/startup"
+	"SmartPower/internal/controller/auth"
 	"context"
 
 	"github.com/gogf/gf/v2/frame/g"
 	"github.com/gogf/gf/v2/net/ghttp"
 	"github.com/gogf/gf/v2/os/gcmd"
-
-	"SmartPower/internal/controller/hello"
 )
 
 var (
@@ -29,7 +28,7 @@ var (
 			s.Group("/", func(group *ghttp.RouterGroup) {
 				group.Middleware(middleware.HandlerResponseMiddleware)
 				group.Bind(
-					hello.NewV1(),
+					auth.NewV1(),
 				)
 			})
 			s.Run()

@@ -2,8 +2,6 @@ package middleware
 
 import (
 	"SmartPower/internal/config/xerror"
-	"github.com/gogf/gf/v2/errors/gcode"
-	"github.com/gogf/gf/v2/errors/gerror"
 	"github.com/gogf/gf/v2/net/ghttp"
 	"net/http"
 )
@@ -45,7 +43,7 @@ func HandlerResponseMiddleware(r *ghttp.Request) {
 		code = *xerror.GetECode(err)
 	)
 	if r.GetError() != nil {
-		if gerror.Code(err) == gcode.CodeNil {
+		if xerror.GetECode(err) == nil {
 			code = xerror.ServerInternalError
 		}
 		msg = err.Error()
