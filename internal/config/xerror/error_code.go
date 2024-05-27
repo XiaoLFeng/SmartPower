@@ -32,4 +32,10 @@ var (
 	UnknownError        = LocalCode{output: "UnknownError", code: 102, message: "未知错误"}
 	PageNotFound        = LocalCode{output: "PageNotFound", code: 110, message: "页面不存在"}
 	StatusForbidden     = LocalCode{output: "StatusForbidden", code: 111, message: "禁止访问"}
+	UserAlreadyExists   = LocalCode{output: "UserAlreadyExists", code: 112, message: "用户已存在"}
+	UserNotExist        = LocalCode{output: "UserNotExist", code: 113, message: "用户不存在"}
 )
+
+func BaseLocalCode(output string, code int, message string) ECode {
+	return LocalCode{output: output, code: code, message: message}
+}
