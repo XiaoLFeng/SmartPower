@@ -25,6 +25,7 @@ func SystemDatabaseTablePreparation(ctx context.Context) {
 	prepareDatabase(ctx, "xf_companies")
 	prepareDatabase(ctx, "xf_electricity_rates")
 	prepareDatabase(ctx, "xf_token")
+	prepareDatabase(ctx, "xf_companies_electricity")
 }
 
 /*

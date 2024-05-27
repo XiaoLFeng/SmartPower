@@ -1,7 +1,7 @@
 -- Description: 用电企业表
 create table dbo.xf_companies
 (
-    cods           nvarchar(18)               not null
+    cods           varchar(18)               not null
         constraint xf_companies_pk
             primary key,
     name           nvarchar(40)               not null,
