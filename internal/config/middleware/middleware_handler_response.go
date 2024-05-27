@@ -4,6 +4,7 @@ import (
 	"SmartPower/internal/config/xerror"
 	"github.com/gogf/gf/v2/net/ghttp"
 	"net/http"
+	"reflect"
 )
 
 /*
@@ -18,7 +19,7 @@ BaseResponse
   - code: int, 状态码
   - message: string, 中文描述
   - error_message: string, 错误信息(可选)
-  - data: interface{}, 数据
+  - data: interface{}, 数据(可选)
 */
 type BaseResponse struct {
 	Output       string      `json:"output" dc:"英文输出"`
@@ -65,11 +66,20 @@ func HandlerResponseMiddleware(r *ghttp.Request) {
 		}
 	}
 
-	r.Response.WriteJson(BaseResponse{
-		Output:       code.Output(),
-		Code:         code.Code(),
-		Message:      code.Message(),
-		ErrorMessage: msg,
-		Data:         res,
-	})
+	if reflect.ValueOf(res).IsNil() {
+		r.Response.WriteJson(BaseResponse{
+			Output:       code.Output(),
+			Code:         code.Code(),
+			Message:      code.Message(),
+			ErrorMessage: msg,
+		})
+	} else {
+		r.Response.WriteJson(BaseResponse{
+			Output:       code.Output(),
+			Code:         code.Code(),
+			Message:      code.Message(),
+			ErrorMessage: msg,
+			Data:         res,
+		})
+	}
 }
