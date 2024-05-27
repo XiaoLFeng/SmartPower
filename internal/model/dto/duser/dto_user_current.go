@@ -1,5 +1,7 @@
 package duser
 
+import "SmartPower/internal/model/dto/dcompany"
+
 // UserCurrent
 //
 // # 用户信息
@@ -12,6 +14,20 @@ package duser
 type UserCurrent struct {
 	User  DUser  `json:"user"`
 	Token string `json:"token"`
+}
+
+// UserDetailed
+//
+// # 用户详细信息
+//
+// 用于获取用户的详细信息，这些信息用于数据之间的传输工作使用
+//
+// # 参数
+//   - User: DUser, 用户信息
+//   - Company: dcompany.DCompany, 公司信息
+type UserDetailed struct {
+	User    DUser             `json:"user"`
+	Company dcompany.DCompany `json:"company"`
 }
 
 // DUser

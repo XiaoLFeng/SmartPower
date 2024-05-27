@@ -4,6 +4,8 @@ import (
 	"SmartPower/internal/config/middleware"
 	"SmartPower/internal/config/startup"
 	"SmartPower/internal/controller/auth"
+	"SmartPower/internal/controller/electricity"
+	"SmartPower/internal/controller/user"
 	"context"
 
 	"github.com/gogf/gf/v2/frame/g"
@@ -29,6 +31,8 @@ var (
 				group.Middleware(middleware.HandlerResponseMiddleware)
 				group.Bind(
 					auth.NewV1(),
+					user.NewV1(),
+					electricity.NewV1(),
 				)
 			})
 			s.Run()
