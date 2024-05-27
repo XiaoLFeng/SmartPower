@@ -7,7 +7,7 @@ create table dbo.xf_companies
     name           nvarchar(40)               not null,
     address        nvarchar(1024)             not null,
     representative nvarchar(100)              not null,
-    uuid           nvarchar(36)               not null
+    uuid           varchar(36)               not null
         constraint xf_companies_xf_user_uuid_fk
             references xf_user
             on update cascade,

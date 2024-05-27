@@ -6,4 +6,5 @@ package logic
 
 import (
 	_ "SmartPower/internal/logic/auth"
+	_ "SmartPower/internal/logic/token"
 )

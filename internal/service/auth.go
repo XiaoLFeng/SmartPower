@@ -7,11 +7,26 @@ package service
 
 import (
 	v1 "SmartPower/api/auth/v1"
+	"SmartPower/internal/model/dto/duser"
 	"context"
 )
 
 type (
 	IAuth interface {
+		// AuthLogin
+		//
+		// # 用户登录逻辑
+		//
+		// 用户登录逻辑, 登录成功后返回用户信息.
+		//
+		// # 参数:
+		//   - ctx: context.Context, 上下文
+		//   - duser: string, 用户名/邮箱/手机号
+		//   - password: string, 密码
+		//
+		// # 返回:
+		//   - err: error, 错误
+		AuthLogin(ctx context.Context, user string, password string) (dUser *duser.UserCurrent, err error)
 		// UserRegister
 		//
 		// # 用户注册

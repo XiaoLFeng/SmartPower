@@ -32,8 +32,10 @@ var (
 	UnknownError        = LocalCode{output: "UnknownError", code: 102, message: "未知错误"}
 	PageNotFound        = LocalCode{output: "PageNotFound", code: 110, message: "页面不存在"}
 	StatusForbidden     = LocalCode{output: "StatusForbidden", code: 111, message: "禁止访问"}
-	UserAlreadyExists   = LocalCode{output: "UserAlreadyExists", code: 112, message: "用户已存在"}
-	UserNotExist        = LocalCode{output: "UserNotExist", code: 113, message: "用户不存在"}
+	AlreadyExists       = LocalCode{output: "AlreadyExists", code: 112, message: "内容已存在"}
+	NotExist            = LocalCode{output: "NotExist", code: 113, message: "内容不存在"}
+	Expired             = LocalCode{output: "Expired", code: 114, message: "内容已过期"}
+	OperationFailed     = LocalCode{output: "OperationFailed", code: 115, message: "操作失败"}
 )
 
 func BaseLocalCode(output string, code int, message string) ECode {

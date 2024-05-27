@@ -1,10 +1,10 @@
 -- Description: 用户表
 create table dbo.xf_user
 (
-    uuid       nvarchar(36)               not null
+    uuid       varchar(36)               not null
         constraint xf_user_pk
             primary key,
-    username   nvarchar(30)               not null,
+    username   varchar(30)               not null,
     email      nvarchar(50)               not null,
     phone      nvarchar(15)               not null,
     password   nvarchar(100)              not null,

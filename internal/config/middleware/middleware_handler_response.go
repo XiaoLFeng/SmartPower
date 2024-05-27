@@ -3,6 +3,7 @@ package middleware
 import (
 	"SmartPower/internal/config/xerror"
 	"github.com/gogf/gf/v2/net/ghttp"
+	"github.com/gogf/gf/v2/os/glog"
 	"net/http"
 	"reflect"
 )
@@ -81,5 +82,10 @@ func HandlerResponseMiddleware(r *ghttp.Request) {
 			ErrorMessage: msg,
 			Data:         res,
 		})
+	}
+	if msg != "" {
+		glog.Noticef(r.Context(), "[RESPONSE] <%d>%s %s - %s", code.Code(), code.Output(), code.Message(), msg)
+	} else {
+		glog.Noticef(r.Context(), "[RESPONSE] <%d>%s %s", code.Code(), code.Output(), code.Message())
 	}
 }

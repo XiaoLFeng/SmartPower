@@ -3,6 +3,7 @@ package auth
 import (
 	"SmartPower/internal/service"
 	"context"
+	"github.com/gogf/gf/v2/os/glog"
 
 	"SmartPower/api/auth/v1"
 )
@@ -21,6 +22,7 @@ import (
 //   - res: *v1.AuthRegisterRes, 返回
 //   - err: error, 错误
 func (c *ControllerV1) AuthRegister(ctx context.Context, req *v1.AuthRegisterReq) (res *v1.AuthRegisterRes, err error) {
+	glog.Noticef(ctx, "[CONTROL] 执行 AuthRegister | 注册")
 	err = service.Auth().UserRegister(ctx, req)
 	if err != nil {
 		return nil, err

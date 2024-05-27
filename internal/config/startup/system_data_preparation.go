@@ -29,7 +29,7 @@ func SystemDataPreparation(ctx context.Context) {
 	prepareInfoTableData(ctx, "system_github", "https://github.com/XiaoLFeng/SmartPower")
 
 	prepareRoleTableData(ctx, md5.Sum([]byte("admin")), "admin", "超级管理员", "拥有系统所有权限")
-	prepareRoleTableData(ctx, md5.Sum([]byte("user")), "user", "普通用户", "普通用户权限")
+	prepareRoleTableData(ctx, md5.Sum([]byte("duser")), "duser", "普通用户", "普通用户权限")
 }
 
 // prepareInfoTableData

@@ -10,6 +10,7 @@ import (
 	"context"
 	"github.com/gogf/gf/v2/database/gdb"
 	"github.com/gogf/gf/v2/frame/g"
+	"github.com/gogf/gf/v2/os/glog"
 	"github.com/google/uuid"
 )
 
@@ -27,6 +28,7 @@ import (
 // # 返回:
 //   - err: error, 错误
 func (s *sAuth) UserRegister(ctx context.Context, req *v1.AuthRegisterReq) (err error) {
+	glog.Noticef(ctx, "[LOGIC] 执行 UserRegister | 用户注册")
 	// 对输入信息进行检查
 	var getUser *entity.XfUser
 	err = dao.XfUser.Ctx(ctx).
@@ -36,7 +38,7 @@ func (s *sAuth) UserRegister(ctx context.Context, req *v1.AuthRegisterReq) (err 
 		Limit(1).
 		Scan(&getUser)
 	if getUser != nil {
-		return xerror.NewErrorHasError(xerror.UserAlreadyExists, err)
+		return xerror.NewErrorHasError(xerror.AlreadyExists, err, "用户已存在")
 	}
 	// 检查企业是否存在
 	var getEnterprise *entity.XfCompanies
@@ -61,6 +63,7 @@ func (s *sAuth) UserRegister(ctx context.Context, req *v1.AuthRegisterReq) (err 
 			Username: req.Username,
 			Email:    req.Email,
 			Phone:    req.Phone,
+			Role:     util.GetUserRoleUUID(),
 			Password: util.EncodePassword(req.Password),
 		})
 		// 企业注册

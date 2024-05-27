@@ -9,7 +9,7 @@ import "github.com/gogf/gf/v2/frame/g"
 // 用户注册请求, 注册成功后返回用户信息.
 //
 // # 参数:
-//   - user: string, 账号
+//   - duser: string, 账号
 //   - password: string, 密码
 type AuthRegisterReq struct {
 	g.Meta         `path:"/api/v1/auth/login" method:"Post" summary:"用户注册" tags:"授权控制器"`
