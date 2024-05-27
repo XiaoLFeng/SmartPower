@@ -2,10 +2,12 @@ package middleware
 
 import (
 	"SmartPower/internal/config/xerror"
+	"github.com/gogf/gf/v2/errors/gcode"
+	"github.com/gogf/gf/v2/errors/gerror"
+	"github.com/gogf/gf/v2/frame/g"
 	"github.com/gogf/gf/v2/net/ghttp"
 	"github.com/gogf/gf/v2/os/glog"
 	"net/http"
-	"reflect"
 )
 
 /*
@@ -42,13 +44,24 @@ func HandlerResponseMiddleware(r *ghttp.Request) {
 		msg  string
 		err  = r.GetError()
 		res  = r.GetHandlerResponse()
-		code = *xerror.GetECode(err)
+		code = xerror.ECode(xerror.Success)
 	)
 	if r.GetError() != nil {
-		if xerror.GetECode(err) == nil {
-			code = xerror.ServerInternalError
+		// 对 GoFrame 默认的报错作处理
+		if gerror.Code(r.GetError()) != gcode.CodeNil {
+			switch gerror.Code(r.GetError()).Code() {
+			case 51:
+				code = xerror.RequestParameterIncorrect
+			}
+			msg = r.GetError().Error()
+		} else {
+			// 自定义处理
+			if xerror.GetECode(err) == nil {
+				code = xerror.ServerInternalError
+			}
+			code = *xerror.GetECode(err)
+			msg = err.Error()
 		}
-		msg = err.Error()
 	} else {
 		if r.Response.Status > 0 && r.Response.Status != http.StatusOK {
 			msg = http.StatusText(r.Response.Status)
@@ -67,7 +80,7 @@ func HandlerResponseMiddleware(r *ghttp.Request) {
 		}
 	}
 
-	if reflect.ValueOf(res).IsNil() {
+	if g.IsNil(res) {
 		r.Response.WriteJson(BaseResponse{
 			Output:       code.Output(),
 			Code:         code.Code(),

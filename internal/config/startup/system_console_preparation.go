@@ -34,7 +34,7 @@ func SystemConsolePreparation(ctx context.Context) {
 			Email:    "admin@sp.com",
 			Phone:    "18888888888",
 			Role:     uuid.UUID(md5.Sum([]byte("admin"))).String(),
-			Password: util.EncodePassword("admin"),
+			Password: util.EncryptPassword("admin"),
 		}).Insert()
 		if err != nil {
 			glog.Errorf(ctx, "[STARTUP] 创建超级管理员失败: %s", err.Error())

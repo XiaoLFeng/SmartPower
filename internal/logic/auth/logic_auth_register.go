@@ -64,7 +64,7 @@ func (s *sAuth) UserRegister(ctx context.Context, req *v1.AuthRegisterReq) (err 
 			Email:    req.Email,
 			Phone:    req.Phone,
 			Role:     util.GetUserRoleUUID(),
-			Password: util.EncodePassword(req.Password),
+			Password: util.EncryptPassword(req.Password),
 		})
 		// 企业注册
 		_, hasError = tx.Ctx(ctx).Insert(dao.XfCompanies.Table(), do.XfCompanies{

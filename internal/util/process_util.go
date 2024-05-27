@@ -5,7 +5,7 @@ import (
 	"golang.org/x/crypto/bcrypt"
 )
 
-// EncodePassword
+// EncryptPassword
 //
 // # 加密密码
 //
@@ -16,7 +16,7 @@ import (
 //
 // # 返回:
 //   - string, 加密后的密码
-func EncodePassword(password string) string {
+func EncryptPassword(password string) string {
 	getBase64Password := base64.StdEncoding.EncodeToString([]byte(password))
 	fromPassword, _ := bcrypt.GenerateFromPassword([]byte(getBase64Password), bcrypt.DefaultCost)
 	return string(fromPassword)

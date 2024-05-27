@@ -7,6 +7,7 @@ import (
 	"SmartPower/internal/model/entity"
 	"context"
 	"github.com/gogf/gf/v2/os/glog"
+	"github.com/gogf/gf/v2/os/gtime"
 )
 
 // GetUserByToken
@@ -25,7 +26,6 @@ import (
 //   - err: error, 错误
 func (s *sToken) GetUserByToken(ctx context.Context, token string) (user *entity.XfUser, err error) {
 	glog.Noticef(ctx, "[LOGIC] 执行 GetUserByToken | 根据令牌获取用户信息")
-	// 根据 token 获取用户信息
 	var getToken *entity.XfToken
 	err = dao.XfToken.Ctx(ctx).Where(do.XfToken{Token: token}).Scan(&getToken)
 	if err != nil {
@@ -34,15 +34,22 @@ func (s *sToken) GetUserByToken(ctx context.Context, token string) (user *entity
 	if getToken == nil {
 		return nil, xerror.NewError(xerror.NotExist, "令牌不存在")
 	}
-	// 获取用户信息
-	var getUser *entity.XfUser
-	err = dao.XfUser.Ctx(ctx).Where(do.XfUser{Uuid: getToken.Uuid}).Scan(&getUser)
-	if err != nil {
-		return nil, xerror.NewErrorHasError(xerror.ServerInternalError, err)
-	}
-	if getUser == nil {
-		return nil, xerror.NewError(xerror.NotExist, "用户不存在")
+	// 令牌存在，检查是否过期
+	if getToken.ExpiredAt.After(gtime.Now()) {
+		// 获取用户信息
+		var getUser *entity.XfUser
+		err = dao.XfUser.Ctx(ctx).Where(do.XfUser{Uuid: getToken.Uuid}).Scan(&getUser)
+		if err != nil {
+			return nil, xerror.NewErrorHasError(xerror.ServerInternalError, err)
+		}
+		if getUser == nil {
+			return nil, xerror.NewError(xerror.NotExist, "用户不存在")
+		} else {
+			return getUser, nil
+		}
 	} else {
-		return getUser, nil
+		// 令牌过期并且删除内容
+		_, _ = dao.XfToken.Ctx(ctx).Where(do.XfToken{Token: token}).Delete()
+		return nil, xerror.NewError(xerror.Expired, "令牌已过期")
 	}
 }

@@ -8,11 +8,13 @@ package service
 import (
 	v1 "SmartPower/api/auth/v1"
 	"SmartPower/internal/model/dto/duser"
+	"SmartPower/internal/model/entity"
 	"context"
 )
 
 type (
 	IAuth interface {
+		ChangePassword(ctx context.Context, getUser entity.XfUser, nowPassword string, newPassword string) (err error)
 		// AuthLogin
 		//
 		// # 用户登录逻辑
@@ -21,10 +23,11 @@ type (
 		//
 		// # 参数:
 		//   - ctx: context.Context, 上下文
-		//   - duser: string, 用户名/邮箱/手机号
+		//   - user: string, 用户名/邮箱/手机号
 		//   - password: string, 密码
 		//
 		// # 返回:
+		//   - dUser: *duser.UserCurrent, 用户信息
 		//   - err: error, 错误
 		AuthLogin(ctx context.Context, user string, password string) (dUser *duser.UserCurrent, err error)
 		// UserRegister
