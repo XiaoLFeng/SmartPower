@@ -9,12 +9,12 @@ create table dbo.xf_companies
     representative nvarchar(100)              not null,
     uuid           nvarchar(36)               not null
         constraint xf_companies_xf_user_uuid_fk
-            references dbo.xf_user
+            references xf_user
             on update cascade,
     created_at     datetime default getdate() not null,
     updated_at     datetime
 )
-    go
+go
 
 exec sp_addextendedproperty 'MS_Description', N'用电企业表', 'SCHEMA', 'dbo', 'TABLE', 'xf_companies'
 go
@@ -47,5 +47,9 @@ go
 
 exec sp_addextendedproperty 'MS_Description', N'更新时间', 'SCHEMA', 'dbo', 'TABLE', 'xf_companies', 'COLUMN',
      'updated_at'
+go
+
+create unique index xf_companies_name_uindex
+    on xf_companies (name)
 go
 

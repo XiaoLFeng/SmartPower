@@ -17,6 +17,7 @@ type XfUser struct {
 	Email     interface{} // 邮箱
 	Phone     interface{} // 手机号
 	Password  interface{} // 用户密码
+	Role      interface{} // 角色主键
 	CreatedAt *gtime.Time // 创建时间
 	UpdatedAt *gtime.Time // 修改时间
 }

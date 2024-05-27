@@ -8,6 +8,10 @@ create table dbo.xf_user
     email      nvarchar(50)               not null,
     phone      nvarchar(15)               not null,
     password   nvarchar(100)              not null,
+    role       varchar(36)                not null
+        constraint xf_user_fy_role_ruuid_fk
+            references dbo.xf_role
+            on update cascade,
     created_at datetime default getdate() not null,
     updated_at datetime
 )
@@ -29,6 +33,9 @@ exec sp_addextendedproperty 'MS_Description', N'手机号', 'SCHEMA', 'dbo', 'TA
 go
 
 exec sp_addextendedproperty 'MS_Description', N'用户密码', 'SCHEMA', 'dbo', 'TABLE', 'xf_user', 'COLUMN', 'password'
+go
+
+exec sp_addextendedproperty 'MS_Description', N'角色主键', 'SCHEMA', 'dbo', 'TABLE', 'xf_user', 'COLUMN', 'role'
 go
 
 exec sp_addextendedproperty 'MS_Description', N'创建时间', 'SCHEMA', 'dbo', 'TABLE', 'xf_user', 'COLUMN', 'created_at'

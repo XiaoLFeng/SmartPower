@@ -15,6 +15,7 @@ type XfUser struct {
 	Email     string      `json:"email"     orm:"email"      ` // 邮箱
 	Phone     string      `json:"phone"     orm:"phone"      ` // 手机号
 	Password  string      `json:"password"  orm:"password"   ` // 用户密码
+	Role      string      `json:"role"      orm:"role"       ` // 角色主键
 	CreatedAt *gtime.Time `json:"createdAt" orm:"created_at" ` // 创建时间
 	UpdatedAt *gtime.Time `json:"updatedAt" orm:"updated_at" ` // 修改时间
 }

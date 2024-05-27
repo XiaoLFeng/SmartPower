@@ -17,8 +17,10 @@ SystemDatabaseTablePreparation
   - ctx: context.Context, 上下文
 */
 func SystemDatabaseTablePreparation(ctx context.Context) {
+	glog.Noticef(ctx, "[STARTUP] 开始进行系统数据库表准备检查")
 	// 数据库检查准备
 	prepareDatabase(ctx, "xf_info")
+	prepareDatabase(ctx, "xf_role")
 	prepareDatabase(ctx, "xf_user")
 	prepareDatabase(ctx, "xf_companies")
 	prepareDatabase(ctx, "xf_electricity_rates")
