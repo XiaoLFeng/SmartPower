@@ -3,6 +3,7 @@ package cmd
 import (
 	"SmartPower/internal/config/middleware"
 	"SmartPower/internal/config/startup"
+	"SmartPower/internal/config/task"
 	"SmartPower/internal/controller/auth"
 	"SmartPower/internal/controller/electricity"
 	"SmartPower/internal/controller/user"
@@ -26,6 +27,8 @@ var (
 			startup.SystemDataPreparation(ctx)
 			startup.SystemConsolePreparation(ctx)
 			startup.SystemPreparationFinal(ctx)
+			// 启动定时器
+			task.CleanTokenTask(ctx)
 			// 路由表控制
 			s.Group("/", func(group *ghttp.RouterGroup) {
 				group.Middleware(middleware.HandlerResponseMiddleware)
