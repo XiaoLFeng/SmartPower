@@ -27,7 +27,7 @@ import (
 //   - err: error, 错误信息
 func (s *sElectric) RateAdd(ctx context.Context, valley float64, peak float64, timer gtime.Time) (err error) {
 	glog.Noticef(ctx, "[LOGIC] 执行 RateAdd | 添加月电价")
-	getYearMonth := timer.StartOfMonth().Format("200601")
+	getYearMonth := timer.StartOfMonth().Format("Ym")
 	glog.Debugf(ctx, "获取到的年月: %s", getYearMonth)
 	// 检查指定年月是否创建
 	var checkRate *entity.XfElectricityRates

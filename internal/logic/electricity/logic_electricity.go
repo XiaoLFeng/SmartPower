@@ -33,7 +33,7 @@ func (s *sElectric) CreateElectricity(
 	timePicker gtime.Time,
 ) (err error) {
 	glog.Noticef(ctx, "[LOGIC] 执行 CreateElectricity | 创建电费")
-	getYearMonth := timePicker.StartOfMonth().Format("200601")
+	getYearMonth := timePicker.StartOfMonth().Format("Ym")
 	getCompany, err := s.getCompanyByHeader(ctx)
 	if err != nil {
 		return err
@@ -41,7 +41,7 @@ func (s *sElectric) CreateElectricity(
 	// 检查 timePicker 是否与之前统计重复
 	var getElectricity *entity.XfCompaniesElectricity
 	err = dao.XfCompaniesElectricity.Ctx(ctx).
-		Where(do.XfCompaniesElectricity{PeriodAt: &timePicker, Cods: getCompany.Cods}).
+		Where(do.XfCompaniesElectricity{PeriodAt: getYearMonth, Cods: getCompany.Cods}).
 		Scan(&getElectricity)
 	if err != nil {
 		return xerror.NewErrorHasError(xerror.ServerInternalError, err)
@@ -100,7 +100,7 @@ func (s *sElectric) GetElectricity(
 	timer gtime.Time,
 ) (getElectricity *delectric.ElectricCompanyDTO, err error) {
 	glog.Noticef(ctx, "[LOGIC] 执行 ElectricGet | 获取电费")
-	getYearMonth := timer.StartOfMonth().Format("200601")
+	getYearMonth := timer.StartOfMonth().Format("Ym")
 	getCompany, err := s.getCompanyByHeader(ctx)
 	if err != nil {
 		return nil, err
@@ -223,7 +223,7 @@ func (s *sElectric) GetAllElectricity(ctx context.Context) (electricity *delectr
 //   - err: error, 错误
 func (s *sElectric) EditElectricity(ctx context.Context, valley float64, peak float64, timer gtime.Time) (err error) {
 	glog.Noticef(ctx, "[LOGIC] 执行 ElectricEdit | 编辑电费")
-	getYearMonth := timer.StartOfMonth().Format("200601")
+	getYearMonth := timer.StartOfMonth().Format("Ym")
 	getCompany, err := s.getCompanyByHeader(ctx)
 	if err != nil {
 		return err

@@ -6,10 +6,10 @@
 package service
 
 import (
+	"SmartPower/internal/model/dto/dcompany"
 	"SmartPower/internal/model/dto/delectric"
 	"SmartPower/internal/model/entity"
 	"context"
-
 	"github.com/gogf/gf/v2/os/gtime"
 )
 
@@ -84,6 +84,21 @@ type (
 		// # 返回:
 		//   - err: error, 错误
 		DeleteElectricity(ctx context.Context, CeUUID string) (err error)
+		// RegionCalculate
+		//
+		// # 电费区域计算
+		//
+		// 电费区域计算, 用于计算电费. 传入区域, 开始时间, 结束时间.
+		//
+		// # 参数:
+		//   - ctx: context.Context, 上下文
+		//   - region: string, 区域
+		//   - startTime: gtime.Time, 开始时间
+		//   - endTime: gtime.Time, 结束时间
+		//
+		// # 返回:
+		//   - err: error, 错误
+		RegionCalculate(ctx context.Context, region string, startTime gtime.Time, endTime gtime.Time) (calculate *dcompany.CompanyRegionDTO, err error)
 		// RateAdd
 		//
 		// # 添加月电价
