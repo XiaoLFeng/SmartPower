@@ -15,4 +15,5 @@ type IElectricityV1 interface {
 	ElectricCreate(ctx context.Context, req *v1.ElectricCreateReq) (res *v1.ElectricCreateRes, err error)
 	ElectricDeleteRate(ctx context.Context, req *v1.ElectricDeleteRateReq) (res *v1.ElectricDeleteRateRes, err error)
 	ElectricRateEdit(ctx context.Context, req *v1.ElectricRateEditReq) (res *v1.ElectricRateEditRes, err error)
+	ElectricGetRate(ctx context.Context, req *v1.ElectricGetRateReq) (res *v1.ElectricGetRateRes, err error)
 }

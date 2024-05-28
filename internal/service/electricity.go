@@ -6,6 +6,7 @@
 package service
 
 import (
+	"SmartPower/internal/model/entity"
 	"context"
 
 	"github.com/gogf/gf/v2/os/gtime"
@@ -70,6 +71,18 @@ type (
 		// # 返回:
 		//   - err: error, 错误信息
 		RateDelete(ctx context.Context, rateID int64) (err error)
+		// RateGet
+		//
+		// # 获取月电价
+		//
+		// 获取月电价, 用于获取月电价. 传入电价ID.
+		//
+		// # 参数:
+		//   - ctx: context.Context, 上下文
+		//
+		// # 返回:
+		//   - err: error, 错误信息
+		RateGet(ctx context.Context) (rate []*entity.XfElectricityRates, err error)
 	}
 )
 

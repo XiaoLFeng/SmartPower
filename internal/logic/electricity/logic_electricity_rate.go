@@ -129,3 +129,24 @@ func (s *sElectric) RateDelete(ctx context.Context, rateID int64) (err error) {
 	})
 	return nil
 }
+
+// RateGet
+//
+// # 获取月电价
+//
+// 获取月电价, 用于获取月电价. 传入电价ID.
+//
+// # 参数:
+//   - ctx: context.Context, 上下文
+//
+// # 返回:
+//   - err: error, 错误信息
+func (s *sElectric) RateGet(ctx context.Context) (rate []*entity.XfElectricityRates, err error) {
+	glog.Noticef(ctx, "[CONTROLLER] 执行 RateGet | 获取月电价")
+	var getRate []*entity.XfElectricityRates
+	err = dao.XfElectricityRates.Ctx(ctx).OrderDesc("period_at").Scan(&getRate)
+	if err != nil {
+		return nil, xerror.NewErrorHasError(xerror.ServerInternalError, err)
+	}
+	return getRate, nil
+}
