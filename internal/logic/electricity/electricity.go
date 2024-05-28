@@ -22,7 +22,7 @@ func New() *sElectric {
 	return &sElectric{}
 }
 
-// getCompanyByHeader
+// GetCompanyByHeader
 //
 // # 通过请求头获取企业
 //
@@ -35,8 +35,8 @@ func New() *sElectric {
 // # 返回:
 //   - company: *entity.XfCompanies, 企业信息
 //   - err: error, 错误信息
-func (s *sElectric) getCompanyByHeader(ctx context.Context) (company *entity.XfCompanies, err error) {
-	glog.Noticef(ctx, "[LOGIC] 执行 getCompanyByHeader | 通过请求头获取企业")
+func (s *sElectric) GetCompanyByHeader(ctx context.Context) (company *entity.XfCompanies, err error) {
+	glog.Noticef(ctx, "[LOGIC] 执行 GetCompanyByHeader | 通过请求头获取企业")
 	// 获取请求头
 	getRequest := g.RequestFromCtx(ctx)
 	getToken := getRequest.Header.Get("Authorization")

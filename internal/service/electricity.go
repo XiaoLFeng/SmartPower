@@ -15,6 +15,20 @@ import (
 
 type (
 	IElectric interface {
+		// GetCompanyByHeader
+		//
+		// # 通过请求头获取企业
+		//
+		// 通过请求头获取企业, 用于通过请求头获取企业. 用户在这里可以通过请求头获取企业，获取企业的时候需要用户提供请求头，获取成功后会返回企业信息.
+		// 将会从请求头获取授权信息，授权信息将会直接查询指定用户信息，然后查询企业信息.
+		//
+		// # 参数:
+		//   - ctx: context.Context, 上下文
+		//
+		// # 返回:
+		//   - company: *entity.XfCompanies, 企业信息
+		//   - err: error, 错误信息
+		GetCompanyByHeader(ctx context.Context) (company *entity.XfCompanies, err error)
 		// CreateElectricity
 		//
 		// # 创建电费

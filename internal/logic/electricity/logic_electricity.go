@@ -34,7 +34,7 @@ func (s *sElectric) CreateElectricity(
 ) (err error) {
 	glog.Noticef(ctx, "[LOGIC] 执行 CreateElectricity | 创建电费")
 	getYearMonth := timePicker.StartOfMonth().Format("Ym")
-	getCompany, err := s.getCompanyByHeader(ctx)
+	getCompany, err := s.GetCompanyByHeader(ctx)
 	if err != nil {
 		return err
 	}
@@ -101,7 +101,7 @@ func (s *sElectric) GetElectricity(
 ) (getElectricity *delectric.ElectricCompanyDTO, err error) {
 	glog.Noticef(ctx, "[LOGIC] 执行 ElectricGet | 获取电费")
 	getYearMonth := timer.StartOfMonth().Format("Ym")
-	getCompany, err := s.getCompanyByHeader(ctx)
+	getCompany, err := s.GetCompanyByHeader(ctx)
 	if err != nil {
 		return nil, err
 	}
@@ -153,7 +153,7 @@ func (s *sElectric) GetElectricity(
 //   - err: error, 错误信息
 func (s *sElectric) GetAllElectricity(ctx context.Context) (electricity *delectric.ElectricAllCompanyDTO, err error) {
 	glog.Noticef(ctx, "[LOGIC] 执行 GetAllElectricity | 获取所有电费")
-	getCompany, err := s.getCompanyByHeader(ctx)
+	getCompany, err := s.GetCompanyByHeader(ctx)
 	if err != nil {
 		return nil, err
 	}
@@ -224,7 +224,7 @@ func (s *sElectric) GetAllElectricity(ctx context.Context) (electricity *delectr
 func (s *sElectric) EditElectricity(ctx context.Context, valley float64, peak float64, timer gtime.Time) (err error) {
 	glog.Noticef(ctx, "[LOGIC] 执行 ElectricEdit | 编辑电费")
 	getYearMonth := timer.StartOfMonth().Format("Ym")
-	getCompany, err := s.getCompanyByHeader(ctx)
+	getCompany, err := s.GetCompanyByHeader(ctx)
 	if err != nil {
 		return err
 	}
@@ -284,7 +284,7 @@ func (s *sElectric) EditElectricity(ctx context.Context, valley float64, peak fl
 func (s *sElectric) DeleteElectricity(ctx context.Context, CeUUID string) (err error) {
 	glog.Noticef(ctx, "[LOGIC] 执行 ElectricDelete | 删除电费")
 	// 获取用户信息
-	getCompany, err := s.getCompanyByHeader(ctx)
+	getCompany, err := s.GetCompanyByHeader(ctx)
 	if err != nil {
 		return err
 	}
