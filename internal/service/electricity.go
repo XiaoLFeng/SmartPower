@@ -56,6 +56,34 @@ type (
 		//   - electricity: delectric.ElectricAllCompanyDTO, 电费信息
 		//   - err: error, 错误信息
 		GetAllElectricity(ctx context.Context) (electricity *delectric.ElectricAllCompanyDTO, err error)
+		// EditElectricity
+		//
+		// # 编辑电费
+		//
+		// 编辑电费接口, 用于编辑电费. 用户在这里可以进行编辑电费，编辑电费的时候需要用户提供时间参数，编辑成功后会返回电费信息.
+		//
+		// # 参数:
+		//   - ctx: context.Context, 上下文
+		//   - valley: float64, 谷电费
+		//   - peak: float64, 峰电费
+		//   - timer: gtime.Time, 时间
+		//
+		// # 返回:
+		//   - err: error, 错误
+		EditElectricity(ctx context.Context, valley float64, peak float64, timer gtime.Time) (err error)
+		// DeleteElectricity
+		//
+		// # 删除电费
+		//
+		// 删除电费接口, 用于删除电费. 用户在这里可以进行删除电费，删除电费的时候需要用户提供电费的UUID，删除成功后会返回删除成功的信息.
+		//
+		// # 参数:
+		//   - ctx: context.Context, 上下文
+		//   - CeUUID: string, 电费UUID
+		//
+		// # 返回:
+		//   - err: error, 错误
+		DeleteElectricity(ctx context.Context, CeUUID string) (err error)
 		// RateAdd
 		//
 		// # 添加月电价

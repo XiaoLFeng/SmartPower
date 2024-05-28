@@ -206,3 +206,104 @@ func (s *sElectric) GetAllElectricity(ctx context.Context) (electricity *delectr
 		return electricity, nil
 	}
 }
+
+// EditElectricity
+//
+// # 编辑电费
+//
+// 编辑电费接口, 用于编辑电费. 用户在这里可以进行编辑电费，编辑电费的时候需要用户提供时间参数，编辑成功后会返回电费信息.
+//
+// # 参数:
+//   - ctx: context.Context, 上下文
+//   - valley: float64, 谷电费
+//   - peak: float64, 峰电费
+//   - timer: gtime.Time, 时间
+//
+// # 返回:
+//   - err: error, 错误
+func (s *sElectric) EditElectricity(ctx context.Context, valley float64, peak float64, timer gtime.Time) (err error) {
+	glog.Noticef(ctx, "[LOGIC] 执行 ElectricEdit | 编辑电费")
+	getYearMonth := timer.StartOfMonth().Format("200601")
+	getCompany, err := s.getCompanyByHeader(ctx)
+	if err != nil {
+		return err
+	}
+	// 检查指定月份电费是否存在
+	var getElectric *entity.XfCompaniesElectricity
+	err = dao.XfCompaniesElectricity.Ctx(ctx).
+		Where(do.XfCompaniesElectricity{PeriodAt: getYearMonth, Cods: getCompany.Cods}).
+		Scan(&getElectric)
+	if err != nil {
+		return xerror.NewErrorHasError(xerror.ServerInternalError, err)
+	}
+	if getElectric == nil {
+		return xerror.NewError(xerror.OperationFailed, "该月电费未创建")
+	}
+	// 修改后进行重新价格计算
+	var getElectricRate *entity.XfElectricityRates
+	err = dao.XfElectricityRates.Ctx(ctx).Where(do.XfElectricityRates{PeriodAt: getYearMonth}).Scan(&getElectricRate)
+	if err != nil {
+		return xerror.NewErrorHasError(xerror.ServerInternalError, err)
+	}
+	if getElectricRate == nil {
+		return xerror.NewError(xerror.OperationFailed, "该月电价未创建，请联系管理员")
+	}
+	// 计算电费
+	valleyElectricityMoney := valley * getElectricRate.ValleyRate
+	peakElectricityMoney := peak * getElectricRate.PeakRate
+	// 更新电费
+	_, err = dao.XfCompaniesElectricity.Ctx(ctx).
+		Where(do.XfCompaniesElectricity{Ceuuid: getElectric.Ceuuid}).
+		Update(do.XfCompaniesElectricity{
+			ValleyElectricity:     valley,
+			ValleyElectricityBill: valleyElectricityMoney,
+			PeakElectricity:       peak,
+			PeakElectricityBill:   peakElectricityMoney,
+			TotalElectricity:      valley + peak,
+			TotalBill:             valleyElectricityMoney + peakElectricityMoney,
+		})
+	if err != nil {
+		return xerror.NewErrorHasError(xerror.ServerInternalError, err)
+	} else {
+		return nil
+	}
+}
+
+// DeleteElectricity
+//
+// # 删除电费
+//
+// 删除电费接口, 用于删除电费. 用户在这里可以进行删除电费，删除电费的时候需要用户提供电费的UUID，删除成功后会返回删除成功的信息.
+//
+// # 参数:
+//   - ctx: context.Context, 上下文
+//   - CeUUID: string, 电费UUID
+//
+// # 返回:
+//   - err: error, 错误
+func (s *sElectric) DeleteElectricity(ctx context.Context, CeUUID string) (err error) {
+	glog.Noticef(ctx, "[LOGIC] 执行 ElectricDelete | 删除电费")
+	// 获取用户信息
+	getCompany, err := s.getCompanyByHeader(ctx)
+	if err != nil {
+		return err
+	}
+	// 检查是否存在
+	var getElectric *entity.XfCompaniesElectricity
+	err = dao.XfCompaniesElectricity.Ctx(ctx).
+		Where(do.XfCompaniesElectricity{Ceuuid: CeUUID, Cods: getCompany.Cods}).
+		Scan(&getElectric)
+	if err != nil {
+		return xerror.NewErrorHasError(xerror.ServerInternalError, err)
+	}
+	if getElectric == nil {
+		return xerror.NewError(xerror.OperationFailed, "电费不存在")
+	}
+	// 删除电费
+	_, err = dao.XfCompaniesElectricity.Ctx(ctx).Where(do.XfCompaniesElectricity{Ceuuid: CeUUID}).Delete()
+	if err != nil {
+		return xerror.NewErrorHasError(xerror.ServerInternalError, err)
+	} else {
+		return nil
+	}
+}
