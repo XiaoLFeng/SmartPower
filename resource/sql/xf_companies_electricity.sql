@@ -9,7 +9,7 @@ create table xf_companies_electricity
     valley_electricity      decimal(10, 2)             not null,
     valley_electricity_bill decimal(10, 2)             not null,
     peak_electricity        decimal(10, 2)             not null,
-    peak_electricity_bill   int                        not null,
+    peak_electricity_bill   decimal(10, 2)             not null,
     total_electricity       decimal(10, 2)             not null,
     total_bill              decimal(10, 2)             not null,
     created_at              datetime default getdate() not null,

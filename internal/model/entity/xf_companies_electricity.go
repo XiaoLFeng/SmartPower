@@ -16,7 +16,7 @@ type XfCompaniesElectricity struct {
 	ValleyElectricity     float64     `json:"valleyElectricity"     orm:"valley_electricity"      ` // 谷用电
 	ValleyElectricityBill float64     `json:"valleyElectricityBill" orm:"valley_electricity_bill" ` // 谷电价
 	PeakElectricity       float64     `json:"peakElectricity"       orm:"peak_electricity"        ` // 峰用电
-	PeakElectricityBill   int         `json:"peakElectricityBill"   orm:"peak_electricity_bill"   ` // 峰电价
+	PeakElectricityBill   float64     `json:"peakElectricityBill"   orm:"peak_electricity_bill"   ` // 峰电价
 	TotalElectricity      float64     `json:"totalElectricity"      orm:"total_electricity"       ` // 合计电量
 	TotalBill             float64     `json:"totalBill"             orm:"total_bill"              ` // 合计电费
 	CreatedAt             *gtime.Time `json:"createdAt"             orm:"created_at"              ` // 创建时间

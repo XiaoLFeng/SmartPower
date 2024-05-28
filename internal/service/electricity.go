@@ -6,6 +6,7 @@
 package service
 
 import (
+	"SmartPower/internal/model/dto/delectric"
 	"SmartPower/internal/model/entity"
 	"context"
 
@@ -28,6 +29,33 @@ type (
 		// # 返回:
 		//   - err: error, 错误信息
 		CreateElectricity(ctx context.Context, valley float64, peak float64, timePicker gtime.Time) (err error)
+		// GetElectricity
+		//
+		// # 获取电费
+		//
+		// 获取电费接口, 用于获取电费. 用户在这里可以进行获取电费，获取电费的时候需要用户提供获取电费的时间，获取成功后会返回获取成功的信息.
+		//
+		// # 参数:
+		//   - ctx: context.Context, 上下文
+		//   - timer: gtime.Time, 时间
+		//
+		// # 返回:
+		//   - getElectricity: *delectric.ElectricCompanyDTO, 电费信息
+		//   - err: error, 错误信息
+		GetElectricity(ctx context.Context, timer gtime.Time) (getElectricity *delectric.ElectricCompanyDTO, err error)
+		// GetAllElectricity
+		//
+		// # 获取所有电费
+		//
+		// 获取所有电费接口, 用于获取所有电费. 用户在这里可以进行获取所有电费，获取成功后会返回获取成功的信息.
+		//
+		// # 参数:
+		//   - ctx: context.Context, 上下文
+		//
+		// # 返回:
+		//   - electricity: delectric.ElectricAllCompanyDTO, 电费信息
+		//   - err: error, 错误信息
+		GetAllElectricity(ctx context.Context) (electricity *delectric.ElectricAllCompanyDTO, err error)
 		// RateAdd
 		//
 		// # 添加月电价

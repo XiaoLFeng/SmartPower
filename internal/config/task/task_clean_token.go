@@ -19,12 +19,12 @@ import (
 //   - ctx: context.Context, 上下文
 func CleanTokenTask(ctx context.Context) {
 	gtimer.AddTimes(ctx, time.Minute, 5, func(_ context.Context) {
-		startTime := gtime.Now().TimestampMicro()
+		startTime := gtime.Now().TimestampMilli()
 		_, _ = dao.XfToken.Ctx(ctx).Where("expire_time < ?", gtime.Now()).Delete()
 		glog.Noticef(
 			ctx,
 			"[TASK] 执行 CleanTokenTask | 清理过期 Token 完成 | 耗时: %d ms",
-			gtime.Now().TimestampMicro()-startTime,
+			gtime.Now().TimestampMilli()-startTime,
 		)
 	})
 }

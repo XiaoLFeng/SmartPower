@@ -26,7 +26,7 @@ import (
 // # 返回:
 //   - err: error, 错误信息
 func (s *sElectric) RateAdd(ctx context.Context, valley float64, peak float64, timer gtime.Time) (err error) {
-	glog.Noticef(ctx, "[CONTROLLER] 执行 RateAdd | 添加月电价")
+	glog.Noticef(ctx, "[LOGIC] 执行 RateAdd | 添加月电价")
 	getYearMonth := timer.StartOfMonth().Format("200601")
 	glog.Debugf(ctx, "获取到的年月: %s", getYearMonth)
 	// 检查指定年月是否创建
@@ -65,7 +65,7 @@ func (s *sElectric) RateAdd(ctx context.Context, valley float64, peak float64, t
 // # 返回:
 //   - err: error, 错误信息
 func (s *sElectric) RateEdit(ctx context.Context, rateID int64, valley float64, peak float64) (err error) {
-	glog.Noticef(ctx, "[CONTROLLER] 执行 RateEdit | 编辑月电价")
+	glog.Noticef(ctx, "[LOGIC] 执行 RateEdit | 编辑月电价")
 	// 检查电价 ID 是否存在
 	var getRate *entity.XfElectricityRates
 	err = dao.XfElectricityRates.Ctx(ctx).Where(do.XfElectricityRates{Id: rateID}).Scan(&getRate)
@@ -99,7 +99,7 @@ func (s *sElectric) RateEdit(ctx context.Context, rateID int64, valley float64, 
 // # 返回:
 //   - err: error, 错误信息
 func (s *sElectric) RateDelete(ctx context.Context, rateID int64) (err error) {
-	glog.Noticef(ctx, "[CONTROLLER] 执行 RateDelete | 删除月电价")
+	glog.Noticef(ctx, "[LOGIC] 执行 RateDelete | 删除月电价")
 	// 检查电价 ID 是否存在
 	var getRate *entity.XfElectricityRates
 	err = dao.XfElectricityRates.Ctx(ctx).Where(do.XfElectricityRates{Id: rateID}).Scan(&getRate)
@@ -142,7 +142,7 @@ func (s *sElectric) RateDelete(ctx context.Context, rateID int64) (err error) {
 // # 返回:
 //   - err: error, 错误信息
 func (s *sElectric) RateGet(ctx context.Context) (rate []*entity.XfElectricityRates, err error) {
-	glog.Noticef(ctx, "[CONTROLLER] 执行 RateGet | 获取月电价")
+	glog.Noticef(ctx, "[LOGIC] 执行 RateGet | 获取月电价")
 	var getRate []*entity.XfElectricityRates
 	err = dao.XfElectricityRates.Ctx(ctx).OrderDesc("period_at").Scan(&getRate)
 	if err != nil {
