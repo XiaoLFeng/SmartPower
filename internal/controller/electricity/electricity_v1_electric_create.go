@@ -22,10 +22,15 @@ import (
 // # 返回:
 //   - res: *v1.ElectricCreateRes, 创建电费返回
 //   - err: error, 错误信息
-func (c *ControllerV1) ElectricCreate(ctx context.Context, req *v1.ElectricCreateReq) (res *v1.ElectricCreateRes, err error) {
+func (c *ControllerV1) ElectricCreate(
+	ctx context.Context,
+	req *v1.ElectricCreateReq,
+) (res *v1.ElectricCreateRes, err error) {
 	glog.Noticef(ctx, "[CONTROLLER] 执行 ElectricCreate | 创建电费")
 	// 创建电费
-	err = service.Electric().CreateElectricity(ctx, req.ValleyElectricity, req.PeakElectricity, *gtime.NewFromStr(req.TimePicker))
+	err = service.
+		Electric().
+		CreateElectricity(ctx, req.ValleyElectricity, req.PeakElectricity, *gtime.NewFromStr(req.TimePicker))
 	if err != nil {
 		return nil, err
 	} else {

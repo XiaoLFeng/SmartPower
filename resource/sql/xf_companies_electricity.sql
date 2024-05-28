@@ -2,10 +2,10 @@
 create table xf_companies_electricity
 (
     ceuuid                  varchar(36)                not null,
-    cods                    varchar(18)               not null
+    cods                    varchar(18)                not null
         constraint xf_companies_electricity_xf_companies_cods_fk
             references xf_companies,
-    period_at               date                       not null,
+    period_at               varchar(6)                 not null,
     valley_electricity      decimal(10, 2)             not null,
     valley_electricity_bill decimal(10, 2)             not null,
     peak_electricity        decimal(10, 2)             not null,

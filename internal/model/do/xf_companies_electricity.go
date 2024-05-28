@@ -14,7 +14,7 @@ type XfCompaniesElectricity struct {
 	g.Meta                `orm:"table:xf_companies_electricity, do:true"`
 	Ceuuid                interface{} // 企业电费主键
 	Cods                  interface{} //
-	PeriodAt              *gtime.Time // 计费月份周期
+	PeriodAt              interface{} // 计费月份周期
 	ValleyElectricity     interface{} // 谷用电
 	ValleyElectricityBill interface{} // 谷电价
 	PeakElectricity       interface{} // 峰用电

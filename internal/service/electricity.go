@@ -7,6 +7,7 @@ package service
 
 import (
 	"context"
+
 	"github.com/gogf/gf/v2/os/gtime"
 )
 
@@ -26,6 +27,21 @@ type (
 		// # 返回:
 		//   - err: error, 错误信息
 		CreateElectricity(ctx context.Context, valley float64, peak float64, timePicker gtime.Time) (err error)
+		// RateAdd
+		//
+		// # 添加月电价
+		//
+		// 添加月电价, 用于添加月电价. 传入谷电价, 峰电价, 时间.
+		//
+		// # 参数:
+		//   - ctx: context.Context, 上下文
+		//   - valley: float64, 谷电价
+		//   - peak: float64, 峰电价
+		//   - timer: gtime.Time, 时间
+		//
+		// # 返回:
+		//   - err: error, 错误信息
+		RateAdd(ctx context.Context, valley float64, peak float64, timer gtime.Time) (err error)
 	}
 )
 

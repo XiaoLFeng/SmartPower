@@ -13,7 +13,7 @@ import (
 type XfElectricityRates struct {
 	g.Meta     `orm:"table:xf_electricity_rates, do:true"`
 	Id         interface{} // 主键
-	PeriodAt   *gtime.Time // 周期月度表
+	PeriodAt   interface{} // 周期月度表
 	ValleyRate interface{} // 谷值率
 	PeakRate   interface{} // 峰值率
 	CreatedAt  *gtime.Time // 创建时间

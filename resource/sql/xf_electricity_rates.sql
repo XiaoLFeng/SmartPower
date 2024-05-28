@@ -4,7 +4,7 @@ create table dbo.xf_electricity_rates
     id          bigint identity
         constraint xf_electricity_rates_pk
             primary key,
-    period_at   date                       not null,
+    period_at   varchar(6)                 not null,
     valley_rate decimal(10, 2)             not null,
     peak_rate   decimal(10, 2)             not null,
     created_at  datetime default getdate() not null,

@@ -8,9 +8,9 @@ import (
 	"SmartPower/internal/service"
 	"context"
 	"github.com/gogf/gf/v2/frame/g"
+	"github.com/gogf/gf/v2/os/glog"
 	"github.com/gogf/gf/v2/os/gtime"
 	"github.com/google/uuid"
-	"time"
 )
 
 // CreateElectricity
@@ -32,13 +32,8 @@ func (s *sElectric) CreateElectricity(
 	peak float64,
 	timePicker gtime.Time,
 ) (err error) {
-	// 对 timePicker 转换为月份
-	timePicker = *gtime.NewFromTime(time.Date(
-		timePicker.Year(),
-		time.Month(timePicker.Month()),
-		1, 0, 0, 0, 0,
-		timePicker.Location(),
-	))
+	glog.Noticef(ctx, "[CONTROLLER] 执行 CreateElectricity | 创建电费")
+	getYearMonth := timePicker.StartOfMonth().Format("200601")
 	// 获取用户所在的企业
 	getRequest := g.RequestFromCtx(ctx)
 	getToken := getRequest.Header.Get("Authorization")
@@ -69,7 +64,7 @@ func (s *sElectric) CreateElectricity(
 	if getElectricity == nil {
 		// 获取指定月份电价
 		var getElectricRate *entity.XfElectricityRates
-		err := dao.XfElectricityRates.Ctx(ctx).Where(do.XfElectricityRates{PeriodAt: &timePicker}).Scan(&getElectricRate)
+		err := dao.XfElectricityRates.Ctx(ctx).Where(do.XfElectricityRates{PeriodAt: getYearMonth}).Scan(&getElectricRate)
 		if err != nil {
 			return xerror.NewErrorHasError(xerror.ServerInternalError, err)
 		}
@@ -84,7 +79,7 @@ func (s *sElectric) CreateElectricity(
 		_, err = dao.XfCompaniesElectricity.Ctx(ctx).Data(do.XfCompaniesElectricity{
 			Ceuuid:                getUUID.String(),
 			Cods:                  getCompany.Cods,
-			PeriodAt:              &timePicker,
+			PeriodAt:              getYearMonth,
 			ValleyElectricity:     valley,
 			ValleyElectricityBill: valleyElectricityMoney,
 			PeakElectricity:       peak,

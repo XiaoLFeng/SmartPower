@@ -12,7 +12,7 @@ import (
 type XfCompaniesElectricity struct {
 	Ceuuid                string      `json:"ceuuid"                orm:"ceuuid"                  ` // 企业电费主键
 	Cods                  string      `json:"cods"                  orm:"cods"                    ` //
-	PeriodAt              *gtime.Time `json:"periodAt"              orm:"period_at"               ` // 计费月份周期
+	PeriodAt              string      `json:"periodAt"              orm:"period_at"               ` // 计费月份周期
 	ValleyElectricity     float64     `json:"valleyElectricity"     orm:"valley_electricity"      ` // 谷用电
 	ValleyElectricityBill float64     `json:"valleyElectricityBill" orm:"valley_electricity_bill" ` // 谷电价
 	PeakElectricity       float64     `json:"peakElectricity"       orm:"peak_electricity"        ` // 峰用电
