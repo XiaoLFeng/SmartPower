@@ -42,6 +42,34 @@ type (
 		// # 返回:
 		//   - err: error, 错误信息
 		RateAdd(ctx context.Context, valley float64, peak float64, timer gtime.Time) (err error)
+		// RateEdit
+		//
+		// # 编辑月电价
+		//
+		// 编辑月电价, 用于编辑月电价. 传入电价ID, 谷电价, 峰电价.
+		//
+		// # 参数:
+		//   - ctx: context.Context, 上下文
+		//   - rateID: int64, 电价ID
+		//   - valley: float64, 谷电价
+		//   - peak: float64, 峰电价
+		//
+		// # 返回:
+		//   - err: error, 错误信息
+		RateEdit(ctx context.Context, rateID int64, valley float64, peak float64) (err error)
+		// RateDelete
+		//
+		// # 删除月电价
+		//
+		// 删除月电价, 用于删除月电价. 传入电价ID.
+		//
+		// # 参数:
+		//   - ctx: context.Context, 上下文
+		//   - rateID: int64, 电价ID
+		//
+		// # 返回:
+		//   - err: error, 错误信息
+		RateDelete(ctx context.Context, rateID int64) (err error)
 	}
 )
 
