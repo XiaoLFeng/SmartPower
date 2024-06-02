@@ -1,11 +1,12 @@
 package electricity
 
 import (
-	"SmartPower/internal/config/xerror"
 	"SmartPower/internal/dao"
 	"SmartPower/internal/model/do"
 	"SmartPower/internal/model/entity"
 	"context"
+	"github.com/bamboo-services/bamboo-utils/bcode"
+	"github.com/bamboo-services/bamboo-utils/berror"
 	"github.com/gogf/gf/v2/database/gdb"
 	"github.com/gogf/gf/v2/os/glog"
 	"github.com/gogf/gf/v2/os/gtime"
@@ -33,10 +34,10 @@ func (s *sElectric) RateAdd(ctx context.Context, valley float64, peak float64, t
 	var checkRate *entity.XfElectricityRates
 	err = dao.XfElectricityRates.Ctx(ctx).Where(do.XfElectricityRates{PeriodAt: &timer}).Scan(&checkRate)
 	if err != nil {
-		return xerror.NewErrorHasError(xerror.ServerInternalError, err)
+		return berror.NewErrorHasError(bcode.ServerInternalError, err)
 	}
 	if checkRate != nil {
-		return xerror.NewError(xerror.OperationFailed, "已经存在该月电价")
+		return berror.NewError(bcode.OperationFailed, "已经存在该月电价")
 	}
 	// 创建电价
 	_, err = dao.XfElectricityRates.Ctx(ctx).Data(do.XfElectricityRates{
@@ -45,7 +46,7 @@ func (s *sElectric) RateAdd(ctx context.Context, valley float64, peak float64, t
 		PeakRate:   peak,
 	}).Insert()
 	if err != nil {
-		return xerror.NewErrorHasError(xerror.ServerInternalError, err)
+		return berror.NewErrorHasError(bcode.ServerInternalError, err)
 	}
 	return nil
 }
@@ -70,10 +71,10 @@ func (s *sElectric) RateEdit(ctx context.Context, rateID int64, valley float64, 
 	var getRate *entity.XfElectricityRates
 	err = dao.XfElectricityRates.Ctx(ctx).Where(do.XfElectricityRates{Id: rateID}).Scan(&getRate)
 	if err != nil {
-		return xerror.NewErrorHasError(xerror.ServerInternalError, err)
+		return berror.NewErrorHasError(bcode.ServerInternalError, err)
 	}
 	if getRate == nil {
-		return xerror.NewError(xerror.OperationFailed, "电价 ID 不存在")
+		return berror.NewError(bcode.OperationFailed, "电价 ID 不存在")
 	}
 	// 修改电价信息
 	_, err = dao.XfElectricityRates.Ctx(ctx).Data(do.XfElectricityRates{
@@ -81,7 +82,7 @@ func (s *sElectric) RateEdit(ctx context.Context, rateID int64, valley float64, 
 		PeakRate:   peak,
 	}).Where(do.XfElectricityRates{Id: rateID}).Update()
 	if err != nil {
-		return xerror.NewErrorHasError(xerror.ServerInternalError, err)
+		return berror.NewErrorHasError(bcode.ServerInternalError, err)
 	}
 	return nil
 }
@@ -104,10 +105,10 @@ func (s *sElectric) RateDelete(ctx context.Context, rateID int64) (err error) {
 	var getRate *entity.XfElectricityRates
 	err = dao.XfElectricityRates.Ctx(ctx).Where(do.XfElectricityRates{Id: rateID}).Scan(&getRate)
 	if err != nil {
-		return xerror.NewErrorHasError(xerror.ServerInternalError, err)
+		return berror.NewErrorHasError(bcode.ServerInternalError, err)
 	}
 	if getRate == nil {
-		return xerror.NewError(xerror.OperationFailed, "电价 ID 不存在")
+		return berror.NewError(bcode.OperationFailed, "电价 ID 不存在")
 	}
 	// 删除电价信息
 	err = dao.XfElectricityRates.Transaction(ctx, func(_ context.Context, tx gdb.TX) error {
@@ -146,7 +147,7 @@ func (s *sElectric) RateGet(ctx context.Context) (rate []*entity.XfElectricityRa
 	var getRate []*entity.XfElectricityRates
 	err = dao.XfElectricityRates.Ctx(ctx).OrderDesc("period_at").Scan(&getRate)
 	if err != nil {
-		return nil, xerror.NewErrorHasError(xerror.ServerInternalError, err)
+		return nil, berror.NewErrorHasError(bcode.ServerInternalError, err)
 	}
 	return getRate, nil
 }

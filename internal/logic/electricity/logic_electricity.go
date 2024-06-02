@@ -1,13 +1,14 @@
 package electricity
 
 import (
-	"SmartPower/internal/config/xerror"
 	"SmartPower/internal/dao"
 	"SmartPower/internal/model/do"
 	"SmartPower/internal/model/dto/dcompany"
 	"SmartPower/internal/model/dto/delectric"
 	"SmartPower/internal/model/entity"
 	"context"
+	"github.com/bamboo-services/bamboo-utils/bcode"
+	"github.com/bamboo-services/bamboo-utils/berror"
 	"github.com/gogf/gf/v2/os/glog"
 	"github.com/gogf/gf/v2/os/gtime"
 	"github.com/google/uuid"
@@ -44,17 +45,17 @@ func (s *sElectric) CreateElectricity(
 		Where(do.XfCompaniesElectricity{PeriodAt: getYearMonth, Cods: getCompany.Cods}).
 		Scan(&getElectricity)
 	if err != nil {
-		return xerror.NewErrorHasError(xerror.ServerInternalError, err)
+		return berror.NewErrorHasError(bcode.ServerInternalError, err)
 	}
 	if getElectricity == nil {
 		// 获取指定月份电价
 		var getElectricRate *entity.XfElectricityRates
 		err := dao.XfElectricityRates.Ctx(ctx).Where(do.XfElectricityRates{PeriodAt: getYearMonth}).Scan(&getElectricRate)
 		if err != nil {
-			return xerror.NewErrorHasError(xerror.ServerInternalError, err)
+			return berror.NewErrorHasError(bcode.ServerInternalError, err)
 		}
 		if getElectricRate == nil {
-			return xerror.NewError(xerror.OperationFailed, "该月电价未创建，请联系管理员")
+			return berror.NewError(bcode.OperationFailed, "该月电价未创建，请联系管理员")
 		}
 		// 计算电费
 		valleyElectricityMoney := valley * getElectricRate.ValleyRate
@@ -73,12 +74,12 @@ func (s *sElectric) CreateElectricity(
 			TotalBill:             valleyElectricityMoney + peakElectricityMoney,
 		}).Insert()
 		if err != nil {
-			return xerror.NewErrorHasError(xerror.ServerInternalError, err)
+			return berror.NewErrorHasError(bcode.ServerInternalError, err)
 		} else {
 			return nil
 		}
 	} else {
-		return xerror.NewError(xerror.OperationFailed, "该月电表已被创建")
+		return berror.NewError(bcode.OperationFailed, "该月电表已被创建")
 	}
 }
 
@@ -111,10 +112,10 @@ func (s *sElectric) GetElectricity(
 		Data(do.XfCompaniesElectricity{Ceuuid: getCompany.Cods, PeriodAt: getYearMonth}).
 		Scan(&getElectric)
 	if err != nil {
-		return nil, xerror.NewErrorHasError(xerror.ServerInternalError, err)
+		return nil, berror.NewErrorHasError(bcode.ServerInternalError, err)
 	}
 	if getElectric == nil {
-		return nil, xerror.NewError(xerror.OperationFailed, "该月电费未创建")
+		return nil, berror.NewError(bcode.OperationFailed, "该月电费未创建")
 	} else {
 		return &delectric.ElectricCompanyDTO{
 			Company: dcompany.DCompany{
@@ -164,7 +165,7 @@ func (s *sElectric) GetAllElectricity(ctx context.Context) (electricity *delectr
 		OrderDesc("period_at").
 		Scan(&getElectric)
 	if err != nil {
-		return nil, xerror.NewErrorHasError(xerror.ServerInternalError, err)
+		return nil, berror.NewErrorHasError(bcode.ServerInternalError, err)
 	}
 	if getElectric == nil {
 		electricity := &delectric.ElectricAllCompanyDTO{
@@ -234,19 +235,19 @@ func (s *sElectric) EditElectricity(ctx context.Context, valley float64, peak fl
 		Where(do.XfCompaniesElectricity{PeriodAt: getYearMonth, Cods: getCompany.Cods}).
 		Scan(&getElectric)
 	if err != nil {
-		return xerror.NewErrorHasError(xerror.ServerInternalError, err)
+		return berror.NewErrorHasError(bcode.ServerInternalError, err)
 	}
 	if getElectric == nil {
-		return xerror.NewError(xerror.OperationFailed, "该月电费未创建")
+		return berror.NewError(bcode.OperationFailed, "该月电费未创建")
 	}
 	// 修改后进行重新价格计算
 	var getElectricRate *entity.XfElectricityRates
 	err = dao.XfElectricityRates.Ctx(ctx).Where(do.XfElectricityRates{PeriodAt: getYearMonth}).Scan(&getElectricRate)
 	if err != nil {
-		return xerror.NewErrorHasError(xerror.ServerInternalError, err)
+		return berror.NewErrorHasError(bcode.ServerInternalError, err)
 	}
 	if getElectricRate == nil {
-		return xerror.NewError(xerror.OperationFailed, "该月电价未创建，请联系管理员")
+		return berror.NewError(bcode.OperationFailed, "该月电价未创建，请联系管理员")
 	}
 	// 计算电费
 	valleyElectricityMoney := valley * getElectricRate.ValleyRate
@@ -263,7 +264,7 @@ func (s *sElectric) EditElectricity(ctx context.Context, valley float64, peak fl
 			TotalBill:             valleyElectricityMoney + peakElectricityMoney,
 		})
 	if err != nil {
-		return xerror.NewErrorHasError(xerror.ServerInternalError, err)
+		return berror.NewErrorHasError(bcode.ServerInternalError, err)
 	} else {
 		return nil
 	}
@@ -294,15 +295,15 @@ func (s *sElectric) DeleteElectricity(ctx context.Context, CeUUID string) (err e
 		Where(do.XfCompaniesElectricity{Ceuuid: CeUUID, Cods: getCompany.Cods}).
 		Scan(&getElectric)
 	if err != nil {
-		return xerror.NewErrorHasError(xerror.ServerInternalError, err)
+		return berror.NewErrorHasError(bcode.ServerInternalError, err)
 	}
 	if getElectric == nil {
-		return xerror.NewError(xerror.OperationFailed, "电费不存在")
+		return berror.NewError(bcode.OperationFailed, "电费不存在")
 	}
 	// 删除电费
 	_, err = dao.XfCompaniesElectricity.Ctx(ctx).Where(do.XfCompaniesElectricity{Ceuuid: CeUUID}).Delete()
 	if err != nil {
-		return xerror.NewErrorHasError(xerror.ServerInternalError, err)
+		return berror.NewErrorHasError(bcode.ServerInternalError, err)
 	} else {
 		return nil
 	}

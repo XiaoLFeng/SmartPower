@@ -1,12 +1,13 @@
 package auth
 
 import (
-	"SmartPower/internal/config/xerror"
 	"SmartPower/internal/dao"
 	"SmartPower/internal/model/do"
 	"SmartPower/internal/model/entity"
 	"SmartPower/internal/util"
 	"context"
+	"github.com/bamboo-services/bamboo-utils/bcode"
+	"github.com/bamboo-services/bamboo-utils/berror"
 	"github.com/gogf/gf/v2/os/glog"
 )
 
@@ -33,11 +34,11 @@ func (s *sAuth) ChangePassword(ctx context.Context, getUser entity.XfUser, nowPa
 		// 更新密码
 		_, err = dao.XfUser.Ctx(ctx).Where(do.XfUser{Uuid: getUser.Uuid}).Update(getUser)
 		if err != nil {
-			return xerror.NewErrorHasError(xerror.ServerInternalError, err)
+			return berror.NewErrorHasError(bcode.ServerInternalError, err)
 		} else {
 			return nil
 		}
 	} else {
-		return xerror.NewError(xerror.OperationFailed, "密码错误")
+		return berror.NewError(bcode.OperationFailed, "密码错误")
 	}
 }

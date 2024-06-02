@@ -8,6 +8,8 @@ import (
 	"SmartPower/internal/model/entity"
 	"SmartPower/internal/service"
 	"context"
+	"github.com/bamboo-services/bamboo-utils/bcode"
+	"github.com/bamboo-services/bamboo-utils/berror"
 	"github.com/gogf/gf/v2/frame/g"
 	"github.com/gogf/gf/v2/os/glog"
 )
@@ -39,7 +41,7 @@ func (s *sUser) GetUserCurrent(ctx context.Context) (getUser *duser.UserDetailed
 		var getCompany *entity.XfCompanies
 		err := dao.XfCompanies.Ctx(ctx).Where(do.XfCompanies{Uuid: userInfo.Uuid}).Scan(&getCompany)
 		if err != nil {
-			return nil, err
+			return nil, berror.NewErrorHasError(bcode.ServerInternalError, err)
 		} else {
 			getUser := &duser.UserDetailed{
 				User: duser.DUser{

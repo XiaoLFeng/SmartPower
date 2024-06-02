@@ -1,6 +1,6 @@
 module SmartPower
 
-go 1.18
+go 1.22.2
 
 require (
 	github.com/gogf/gf/contrib/drivers/mssql/v2 v2.7.1
@@ -9,6 +9,7 @@ require (
 
 require (
 	github.com/BurntSushi/toml v1.3.2 // indirect
+	github.com/bamboo-services/bamboo-utils v0.1.0-alpha // indirect
 	github.com/clbanning/mxj/v2 v2.7.0 // indirect
 	github.com/denisenkom/go-mssqldb v0.12.3 // indirect
 	github.com/fatih/color v1.16.0 // indirect

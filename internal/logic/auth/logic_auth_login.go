@@ -1,13 +1,14 @@
 package auth
 
 import (
-	"SmartPower/internal/config/xerror"
 	"SmartPower/internal/dao"
 	"SmartPower/internal/model/do"
 	"SmartPower/internal/model/dto/duser"
 	"SmartPower/internal/model/entity"
 	"SmartPower/internal/util"
 	"context"
+	"github.com/bamboo-services/bamboo-utils/bcode"
+	"github.com/bamboo-services/bamboo-utils/berror"
 	"github.com/gogf/gf/v2/os/glog"
 	"github.com/gogf/gf/v2/os/gtime"
 	"github.com/google/uuid"
@@ -36,10 +37,10 @@ func (s *sAuth) AuthLogin(ctx context.Context, user string, password string) (dU
 		WhereOr(do.XfUser{Email: user}).
 		Scan(&getUser)
 	if err != nil {
-		return nil, xerror.NewErrorHasError(xerror.ServerInternalError, err)
+		return nil, berror.NewErrorHasError(bcode.ServerInternalError, err)
 	}
 	if getUser == nil {
-		return nil, xerror.NewError(xerror.NotExist, "用户 "+user+" 不存在")
+		return nil, berror.NewError(bcode.NotExist, "用户 "+user+" 不存在")
 	}
 	// 对用户进行密码验证
 	if util.VerifyPassword(getUser.Password, password) {
@@ -53,7 +54,7 @@ func (s *sAuth) AuthLogin(ctx context.Context, user string, password string) (dU
 			ExpiredAt: gtime.NewFromTimeStamp(gtime.Timestamp() + 43200),
 		}).Insert()
 		if err != nil {
-			return nil, xerror.NewErrorHasError(xerror.ServerInternalError, err)
+			return nil, berror.NewErrorHasError(bcode.ServerInternalError, err)
 		} else {
 			returnUser := duser.UserCurrent{
 				User: duser.DUser{
@@ -70,6 +71,6 @@ func (s *sAuth) AuthLogin(ctx context.Context, user string, password string) (dU
 			return &returnUser, nil
 		}
 	} else {
-		return nil, xerror.NewError(xerror.OperationFailed, "密码错误")
+		return nil, berror.NewError(bcode.OperationFailed, "密码错误")
 	}
 }

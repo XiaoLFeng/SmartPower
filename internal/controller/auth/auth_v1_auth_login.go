@@ -2,9 +2,10 @@ package auth
 
 import (
 	"SmartPower/api/auth/v1"
-	"SmartPower/internal/config/xerror"
 	"SmartPower/internal/service"
 	"context"
+	"github.com/bamboo-services/bamboo-utils/bcode"
+	"github.com/bamboo-services/bamboo-utils/berror"
 	"github.com/gogf/gf/v2/frame/g"
 	"github.com/gogf/gf/v2/os/glog"
 )
@@ -39,6 +40,6 @@ func (c *ControllerV1) AuthLogin(ctx context.Context, req *v1.AuthLoginReq) (res
 			return res, nil
 		}
 	} else {
-		return nil, xerror.NewError(xerror.OperationFailed, "用户已登录")
+		return nil, berror.NewError(bcode.OperationFailed, "用户已登录")
 	}
 }

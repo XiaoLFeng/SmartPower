@@ -2,12 +2,13 @@ package auth
 
 import (
 	v1 "SmartPower/api/auth/v1"
-	"SmartPower/internal/config/xerror"
 	"SmartPower/internal/dao"
 	"SmartPower/internal/model/do"
 	"SmartPower/internal/model/entity"
 	"SmartPower/internal/util"
 	"context"
+	"github.com/bamboo-services/bamboo-utils/bcode"
+	"github.com/bamboo-services/bamboo-utils/berror"
 	"github.com/gogf/gf/v2/database/gdb"
 	"github.com/gogf/gf/v2/frame/g"
 	"github.com/gogf/gf/v2/os/glog"
@@ -38,7 +39,7 @@ func (s *sAuth) UserRegister(ctx context.Context, req *v1.AuthRegisterReq) (err 
 		Limit(1).
 		Scan(&getUser)
 	if getUser != nil {
-		return xerror.NewErrorHasError(xerror.AlreadyExists, err, "用户已存在")
+		return berror.NewErrorHasError(bcode.AlreadyExists, err, "用户已存在")
 	}
 	// 检查企业是否存在
 	var getEnterprise *entity.XfCompanies
@@ -48,8 +49,8 @@ func (s *sAuth) UserRegister(ctx context.Context, req *v1.AuthRegisterReq) (err 
 		Limit(1).
 		Scan(&getEnterprise)
 	if getEnterprise != nil {
-		return xerror.NewErrorHasError(
-			xerror.BaseLocalCode("CompanyAlreadyExists", 201, "企业已存在"),
+		return berror.NewErrorHasError(
+			bcode.BaseLocalCode("CompanyAlreadyExists", 201, "企业已存在"),
 			err,
 		)
 	}
@@ -78,7 +79,7 @@ func (s *sAuth) UserRegister(ctx context.Context, req *v1.AuthRegisterReq) (err 
 		return hasError
 	})
 	if err != nil {
-		return xerror.NewErrorHasError(xerror.ServerInternalError, err)
+		return berror.NewErrorHasError(bcode.ServerInternalError, err)
 	}
 	return nil
 }

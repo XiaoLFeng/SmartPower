@@ -1,13 +1,13 @@
 package cmd
 
 import (
-	"SmartPower/internal/config/middleware"
 	"SmartPower/internal/config/startup"
 	"SmartPower/internal/config/task"
 	"SmartPower/internal/controller/auth"
 	"SmartPower/internal/controller/electricity"
 	"SmartPower/internal/controller/user"
 	"context"
+	"github.com/bamboo-services/bamboo-utils/bmiddle"
 
 	"github.com/gogf/gf/v2/frame/g"
 	"github.com/gogf/gf/v2/net/ghttp"
@@ -31,7 +31,7 @@ var (
 			task.CleanTokenTask(ctx)
 			// 路由表控制
 			s.Group("/", func(group *ghttp.RouterGroup) {
-				group.Middleware(middleware.HandlerResponseMiddleware)
+				group.Middleware(bmiddle.BambooMiddleHandler)
 				group.Bind(
 					auth.NewV1(),
 					user.NewV1(),

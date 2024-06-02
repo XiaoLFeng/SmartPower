@@ -1,11 +1,12 @@
 package user
 
 import (
-	"SmartPower/internal/config/xerror"
 	"SmartPower/internal/dao"
 	"SmartPower/internal/model/do"
 	"SmartPower/internal/service"
 	"context"
+	"github.com/bamboo-services/bamboo-utils/bcode"
+	"github.com/bamboo-services/bamboo-utils/berror"
 	"github.com/gogf/gf/v2/os/glog"
 )
 
@@ -43,7 +44,7 @@ func (s *sUser) UserEditCompany(
 		Where(do.XfCompanies{Uuid: company.Uuid, Cods: company.Cods}).
 		Update()
 	if err != nil {
-		return xerror.NewErrorHasError(xerror.ServerInternalError, err)
+		return berror.NewErrorHasError(bcode.ServerInternalError, err)
 	}
 	return nil
 }

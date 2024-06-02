@@ -1,12 +1,13 @@
 package electricity
 
 import (
-	"SmartPower/internal/config/xerror"
 	"SmartPower/internal/dao"
 	"SmartPower/internal/model/do"
 	"SmartPower/internal/model/dto/dcompany"
 	"SmartPower/internal/model/entity"
 	"context"
+	"github.com/bamboo-services/bamboo-utils/bcode"
+	"github.com/bamboo-services/bamboo-utils/berror"
 	"github.com/gogf/gf/v2/os/glog"
 	"github.com/gogf/gf/v2/os/gtime"
 )
@@ -39,10 +40,10 @@ func (s *sElectric) RegionCalculate(
 		WhereOrLike("name", "%"+region+"%").
 		Scan(&getCompanies)
 	if err != nil {
-		return nil, xerror.NewErrorHasError(xerror.ServerInternalError, err)
+		return nil, berror.NewErrorHasError(bcode.ServerInternalError, err)
 	}
 	if len(getCompanies) == 0 {
-		return nil, xerror.NewError(xerror.NotExist, "该地区没有企业")
+		return nil, berror.NewError(bcode.NotExist, "该地区没有企业")
 	}
 	// 计算电费
 	var regionDTO *dcompany.CompanyRegionDTO
@@ -61,7 +62,7 @@ func (s *sElectric) RegionCalculate(
 			Where("period_at <= ?", endTime.EndOfMonth().Format("Ym")).
 			Scan(&getElectricity)
 		if err != nil {
-			return nil, xerror.NewErrorHasError(xerror.ServerInternalError, err)
+			return nil, berror.NewErrorHasError(bcode.ServerInternalError, err)
 		}
 		var totalValleyElectricity float64 = 0
 		var totalPeakElectricity float64 = 0

@@ -1,11 +1,12 @@
 package user
 
 import (
-	"SmartPower/internal/config/xerror"
 	"SmartPower/internal/dao"
 	"SmartPower/internal/model/do"
 	"SmartPower/internal/service"
 	"context"
+	"github.com/bamboo-services/bamboo-utils/bcode"
+	"github.com/bamboo-services/bamboo-utils/berror"
 	"github.com/gogf/gf/v2/frame/g"
 	"github.com/gogf/gf/v2/os/glog"
 )
@@ -30,10 +31,10 @@ func (s *sUser) UserEditProfile(ctx context.Context, phone string, email string)
 	getToken := getRequest.Header.Get("Authorization")
 	userInfo, err := service.Token().GetUserByToken(ctx, getToken)
 	if err != nil {
-		return xerror.NewErrorHasError(xerror.ServerInternalError, err)
+		return berror.NewErrorHasError(bcode.ServerInternalError, err)
 	}
 	if userInfo == nil {
-		return xerror.NewError(xerror.OperationFailed, "用户不存在")
+		return berror.NewError(bcode.OperationFailed, "用户不存在")
 	}
 	// 更新用户信息
 	_, err = dao.XfUser.Ctx(ctx).
@@ -41,7 +42,7 @@ func (s *sUser) UserEditProfile(ctx context.Context, phone string, email string)
 		Where(do.XfUser{Uuid: userInfo.Uuid}).
 		Update()
 	if err != nil {
-		return xerror.NewErrorHasError(xerror.ServerInternalError, err)
+		return berror.NewErrorHasError(bcode.ServerInternalError, err)
 	}
 	return nil
 }

@@ -1,11 +1,12 @@
 package token
 
 import (
-	"SmartPower/internal/config/xerror"
 	"SmartPower/internal/dao"
 	"SmartPower/internal/model/do"
 	"SmartPower/internal/model/entity"
 	"context"
+	"github.com/bamboo-services/bamboo-utils/bcode"
+	"github.com/bamboo-services/bamboo-utils/berror"
 	"github.com/gogf/gf/v2/os/glog"
 	"github.com/gogf/gf/v2/os/gtime"
 )
@@ -29,16 +30,16 @@ func (s *sToken) CheckTokenExist(ctx context.Context, token string) (err error) 
 	var getToken *entity.XfToken
 	err = dao.XfToken.Ctx(ctx).Where(do.XfToken{Token: token}).Scan(&getToken)
 	if err != nil {
-		return xerror.NewErrorHasError(xerror.ServerInternalError, err)
+		return berror.NewErrorHasError(bcode.ServerInternalError, err)
 	}
 	if getToken == nil {
-		return xerror.NewError(xerror.NotExist, "令牌不存在")
+		return berror.NewError(bcode.NotExist, "令牌不存在")
 	}
 	// 令牌存在，检查是否过期
 	if getToken.ExpiredAt.Before(gtime.Now()) {
 		// 令牌过期并且删除内容
 		_, _ = dao.XfToken.Ctx(ctx).Where(do.XfToken{Token: token}).Delete()
-		return xerror.NewError(xerror.Expired, "令牌已过期")
+		return berror.NewError(bcode.Expired, "令牌已过期")
 	} else {
 		return nil
 	}

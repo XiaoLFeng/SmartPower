@@ -1,11 +1,12 @@
 package token
 
 import (
-	"SmartPower/internal/config/xerror"
 	"SmartPower/internal/dao"
 	"SmartPower/internal/model/do"
 	"SmartPower/internal/model/entity"
 	"context"
+	"github.com/bamboo-services/bamboo-utils/bcode"
+	"github.com/bamboo-services/bamboo-utils/berror"
 	"github.com/gogf/gf/v2/os/glog"
 	"github.com/gogf/gf/v2/os/gtime"
 )
@@ -29,10 +30,10 @@ func (s *sToken) GetUserByToken(ctx context.Context, token string) (user *entity
 	var getToken *entity.XfToken
 	err = dao.XfToken.Ctx(ctx).Where(do.XfToken{Token: token}).Scan(&getToken)
 	if err != nil {
-		return nil, xerror.NewErrorHasError(xerror.ServerInternalError, err)
+		return nil, berror.NewErrorHasError(bcode.ServerInternalError, err)
 	}
 	if getToken == nil {
-		return nil, xerror.NewError(xerror.NotExist, "令牌不存在")
+		return nil, berror.NewError(bcode.NotExist, "令牌不存在")
 	}
 	// 令牌存在，检查是否过期
 	if getToken.ExpiredAt.After(gtime.Now()) {
@@ -40,16 +41,16 @@ func (s *sToken) GetUserByToken(ctx context.Context, token string) (user *entity
 		var getUser *entity.XfUser
 		err = dao.XfUser.Ctx(ctx).Where(do.XfUser{Uuid: getToken.Uuid}).Scan(&getUser)
 		if err != nil {
-			return nil, xerror.NewErrorHasError(xerror.ServerInternalError, err)
+			return nil, berror.NewErrorHasError(bcode.ServerInternalError, err)
 		}
 		if getUser == nil {
-			return nil, xerror.NewError(xerror.NotExist, "用户不存在")
+			return nil, berror.NewError(bcode.NotExist, "用户不存在")
 		} else {
 			return getUser, nil
 		}
 	} else {
 		// 令牌过期并且删除内容
 		_, _ = dao.XfToken.Ctx(ctx).Where(do.XfToken{Token: token}).Delete()
-		return nil, xerror.NewError(xerror.Expired, "令牌已过期")
+		return nil, berror.NewError(bcode.Expired, "令牌已过期")
 	}
 }

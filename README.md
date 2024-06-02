@@ -8,6 +8,8 @@
 智电管家是一款基于 `Golang(GoFrame)` 开发的用电管理系统，使用 `SQL Server` 数据库进行数据存储和管理。
 该系统旨在为用电企业提供高效、便捷的用电管理解决方案，帮助企业合理规划用电成本，实现智能化管理。
 
+![Alt](https://repobeats.axiom.co/api/embed/3aa7c589e1f6392ca653d14da6fff0fb028e4179.svg "Repobeats analytics image")
+
 ## 功能模块
 
 ### 1. 用电企业管理
