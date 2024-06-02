@@ -1,6 +1,7 @@
 package cmd
 
 import (
+	"SmartPower/internal/config/middleware"
 	"SmartPower/internal/config/startup"
 	"SmartPower/internal/config/task"
 	"SmartPower/internal/controller/auth"
@@ -32,6 +33,7 @@ var (
 			// 路由表控制
 			s.Group("/", func(group *ghttp.RouterGroup) {
 				group.Middleware(bmiddle.BambooMiddleHandler)
+				group.Middleware(middleware.MiddleAllowOrigin)
 				group.Bind(
 					auth.NewV1(),
 					user.NewV1(),

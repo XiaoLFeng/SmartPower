@@ -12,7 +12,7 @@ import "github.com/gogf/gf/v2/frame/g"
 //   - duser: string, 账号
 //   - password: string, 密码
 type AuthRegisterReq struct {
-	g.Meta         `path:"/api/v1/auth/login" method:"Post" summary:"用户注册" tags:"授权控制器"`
+	g.Meta         `path:"/api/v1/auth/register" method:"Post" summary:"用户注册" tags:"授权控制器"`
 	Username       string `json:"username" v:"required|length:6,30#请输入用户名|账号长度为:min到:max位"`
 	Email          string `json:"email" v:"required|email#请输入邮箱|请输入正确的邮箱格式"`
 	Phone          string `json:"phone" v:"required|phone#请输入手机号|请输入正确的手机号"`
