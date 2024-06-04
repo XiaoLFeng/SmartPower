@@ -11,14 +11,14 @@ import (
 // internalXfCompaniesDao is internal type for wrapping internal DAO implements.
 type internalXfCompaniesDao = *internal.XfCompaniesDao
 
-// xfCompaniesDao is the data access object for table xf_companies.sql.
+// xfCompaniesDao is the data access object for table xf_companies.
 // You can define custom methods on it to extend its functionality as you wish.
 type xfCompaniesDao struct {
 	internalXfCompaniesDao
 }
 
 var (
-	// XfCompanies is globally public accessible object for table xf_companies.sql operations.
+	// XfCompanies is globally public accessible object for table xf_companies operations.
 	XfCompanies = xfCompaniesDao{
 		internal.NewXfCompaniesDao(),
 	}

@@ -109,7 +109,7 @@ func (s *sElectric) GetElectricity(
 	// 获取电费
 	var getElectric *entity.XfCompaniesElectricity
 	err = dao.XfCompaniesElectricity.Ctx(ctx).
-		Data(do.XfCompaniesElectricity{Ceuuid: getCompany.Cods, PeriodAt: getYearMonth}).
+		Where(do.XfCompaniesElectricity{Cods: getCompany.Cods, PeriodAt: getYearMonth}).
 		Scan(&getElectric)
 	if err != nil {
 		return nil, berror.NewErrorHasError(bcode.ServerInternalError, err)
@@ -306,5 +306,46 @@ func (s *sElectric) DeleteElectricity(ctx context.Context, CeUUID string) (err e
 		return berror.NewErrorHasError(bcode.ServerInternalError, err)
 	} else {
 		return nil
+	}
+}
+
+func (s *sElectric) GetElectricityByCeUUID(ctx context.Context, CeUUID string) (getElectricity *delectric.ElectricCompanyDTO, err error) {
+	glog.Noticef(ctx, "[LOGIC] 执行 GetEleElectricGetctricityByCeUUID | 获取电费")
+	getCompany, err := s.GetCompanyByHeader(ctx)
+	if err != nil {
+		return nil, err
+	}
+	// 获取电费
+	var getElectric *entity.XfCompaniesElectricity
+	err = dao.XfCompaniesElectricity.Ctx(ctx).
+		Where(do.XfCompaniesElectricity{Ceuuid: CeUUID, Cods: getCompany.Cods}).
+		Limit(1).
+		Scan(&getElectric)
+	if err != nil {
+		return nil, berror.NewErrorHasError(bcode.ServerInternalError, err)
+	}
+	if getElectric == nil {
+		return nil, berror.NewError(bcode.OperationFailed, "该月电费未创建")
+	} else {
+		return &delectric.ElectricCompanyDTO{
+			Company: dcompany.DCompany{
+				Cods:           getCompany.Cods,
+				Name:           getCompany.Name,
+				Address:        getCompany.Address,
+				Representative: getCompany.Representative,
+			},
+			Electricity: delectric.ElectricCompanyEntityDTO{
+				CeUUID:                getElectric.Ceuuid,
+				PeriodAt:              getElectric.PeriodAt,
+				ValleyElectricity:     getElectric.ValleyElectricity,
+				ValleyElectricityBill: getElectric.ValleyElectricityBill,
+				PeakElectricity:       getElectric.PeakElectricity,
+				PeakElectricityBill:   getElectric.PeakElectricityBill,
+				TotalElectricity:      getElectric.TotalElectricity,
+				TotalBill:             getElectric.TotalBill,
+				CreatedAt:             getElectric.CreatedAt,
+				UpdatedAt:             getElectric.UpdatedAt,
+			},
+		}, nil
 	}
 }

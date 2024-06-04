@@ -3,6 +3,8 @@ package electricity
 import (
 	"SmartPower/internal/service"
 	"context"
+	"github.com/bamboo-services/bamboo-utils/bcode"
+	"github.com/bamboo-services/bamboo-utils/berror"
 	"github.com/gogf/gf/v2/os/glog"
 	"github.com/gogf/gf/v2/os/gtime"
 
@@ -27,13 +29,28 @@ func (c *ControllerV1) ElectricGet(
 	req *v1.ElectricGetReq,
 ) (res *v1.ElectricGetRes, err error) {
 	glog.Noticef(ctx, "[CONTROL] 执行 ElectricGet | 获取电费")
-	getElectricity, err := service.Electric().GetElectricity(ctx, *gtime.NewFromStr(req.TimePicker))
-	if err != nil {
-		return nil, err
-	} else {
-		res := &v1.ElectricGetRes{
-			ElectricCompanyDTO: *getElectricity,
+	if req.CeUUID != "" {
+		getElectricity, err := service.Electric().GetElectricityByCeUUID(ctx, req.CeUUID)
+		if err != nil {
+			return nil, err
+		} else {
+			res := &v1.ElectricGetRes{
+				ElectricCompanyDTO: *getElectricity,
+			}
+			return res, nil
+
 		}
-		return res, nil
+	} else if req.TimePicker != "" {
+		getElectricity, err := service.Electric().GetElectricity(ctx, *gtime.NewFromStr(req.TimePicker))
+		if err != nil {
+			return nil, err
+		} else {
+			res := &v1.ElectricGetRes{
+				ElectricCompanyDTO: *getElectricity,
+			}
+			return res, nil
+		}
+	} else {
+		return nil, berror.NewError(bcode.RequestParameterIncorrect, "参数缺失")
 	}
 }

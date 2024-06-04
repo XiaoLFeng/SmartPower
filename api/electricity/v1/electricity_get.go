@@ -15,7 +15,8 @@ import (
 //   - time_picker: string, 时间
 type ElectricGetReq struct {
 	g.Meta     `path:"/api/v1/electric" method:"Get" summary:"获取电费" tags:"电控制器"`
-	TimePicker string `json:"time_picker" v:"required#请输入时间" summary:"时间" example:"2024-05-01 00:00:00"`
+	CeUUID     string `json:"ce_uuid" summary:"企业电费主键" example:"018fe1fd-8abd-7f36-97b0-0bcf08daa8e2"`
+	TimePicker string `json:"time_picker" summary:"时间" example:"2024-05-01 00:00:00"`
 }
 
 // ElectricGetRes

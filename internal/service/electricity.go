@@ -99,6 +99,7 @@ type (
 		// # 返回:
 		//   - err: error, 错误
 		DeleteElectricity(ctx context.Context, CeUUID string) (err error)
+		GetElectricityByCeUUID(ctx context.Context, CeUUID string) (getElectricity *delectric.ElectricCompanyDTO, err error)
 		// RegionCalculate
 		//
 		// # 电费区域计算
