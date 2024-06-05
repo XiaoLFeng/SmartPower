@@ -4,7 +4,8 @@ create table xf_companies_electricity
     ceuuid                  varchar(36)                not null,
     cods                    varchar(18)                not null
         constraint xf_companies_electricity_xf_companies_cods_fk
-            references xf_companies,
+            references xf_companies
+            on update cascade on delete cascade,
     period_at               varchar(6)                 not null,
     valley_electricity      decimal(10, 2)             not null,
     valley_electricity_bill decimal(10, 2)             not null,

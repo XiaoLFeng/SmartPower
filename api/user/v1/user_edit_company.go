@@ -15,7 +15,7 @@ import "github.com/gogf/gf/v2/frame/g"
 //   - representative: string, 企业法人
 type UserEditCompanyReq struct {
 	g.Meta         `path:"/api/v1/user/company" method:"Put" summary:"编辑企业信息" tags:"用户控制器"`
-	Cods           string `json:"cods" v:"required|regex:^[1-9]\\d{5}[1-9A-Z]{9}\\d{2}[0-9X]$#请输入统一社会信用代码|统一社会信用代码格式不正确" summary:"企业编码" example:"cods"`
+	Cods           string `json:"cods" v:"required#请输入统一社会信用代码" summary:"企业编码" example:"cods"`
 	Name           string `json:"name" v:"required#请输入企业名称" summary:"企业名称" example:"name"`
 	Address        string `json:"address" v:"required#请输入企业地址" summary:"企业地址" example:"address"`
 	Representative string `json:"representative" v:"required#请输入企业法人" summary:"企业法人" example:"representative"`
