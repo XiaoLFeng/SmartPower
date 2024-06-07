@@ -7,10 +7,10 @@ create table dbo.xf_companies
     name           nvarchar(40)               not null,
     address        nvarchar(1024)             not null,
     representative nvarchar(100)              not null,
-    uuid           varchar(36)               not null
+    uuid           varchar(36)                not null
         constraint xf_companies_xf_user_uuid_fk
             references xf_user
-            on update cascade,
+            on update cascade on delete cascade,
     created_at     datetime default getdate() not null,
     updated_at     datetime
 )

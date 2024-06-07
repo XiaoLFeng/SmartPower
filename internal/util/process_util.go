@@ -3,6 +3,7 @@ package util
 import (
 	"encoding/base64"
 	"golang.org/x/crypto/bcrypt"
+	"math/rand"
 )
 
 // EncryptPassword
@@ -38,4 +39,24 @@ func VerifyPassword(hashPassword string, password string) bool {
 	getBase64Password := base64.StdEncoding.EncodeToString([]byte(password))
 	err := bcrypt.CompareHashAndPassword([]byte(hashPassword), []byte(getBase64Password))
 	return err == nil
+}
+
+// GenerateRandomString
+//
+// # 生成随机字符串
+//
+// 生成随机字符串, 用于生成指定长度的随机字符串.
+//
+// # 参数:
+//   - size: int, 长度
+//
+// # 返回:
+//   - string, 随机字符串
+func GenerateRandomString(size int) string {
+	const charset = "abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789"
+	b := make([]byte, size)
+	for i := range b {
+		b[i] = charset[rand.Intn(len(charset))]
+	}
+	return string(b)
 }

@@ -49,3 +49,17 @@ type DUser struct {
 	Phone    string `json:"phone"`
 	Role     string `json:"role"`
 }
+
+// DUserForConsoleCreate
+//
+// # 控制台用户创建
+//
+// 控制台用户创建, 用于控制台用户创建. 传入用户信息, 密码.
+//
+// # 参数:
+//   - User: DUser, 用户信息
+//   - Password: string, 密码
+type DUserForConsoleCreate struct {
+	User     DUser  `json:"user"`
+	Password string `json:"password"`
+}

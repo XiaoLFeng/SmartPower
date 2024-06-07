@@ -5,6 +5,7 @@ import (
 	"SmartPower/internal/config/startup"
 	"SmartPower/internal/config/task"
 	"SmartPower/internal/controller/auth"
+	"SmartPower/internal/controller/console"
 	"SmartPower/internal/controller/electricity"
 	"SmartPower/internal/controller/user"
 	"context"
@@ -38,6 +39,7 @@ var (
 					auth.NewV1(),
 					user.NewV1(),
 					electricity.NewV1(),
+					console.NewV1(),
 				)
 			})
 			s.Run()
