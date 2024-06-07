@@ -12,7 +12,7 @@ import "github.com/gogf/gf/v2/frame/g"
 //   - RateID: int, 电价ID
 type ElectricDeleteRateReq struct {
 	g.Meta `path:"/api/v1/electric/rate" method:"Delete" summary:"删除电费单价" tags:"电控制器"`
-	RateID int64 `json:"rate_id" v:"required|电价ID不可缺少"`
+	RateID int64 `json:"id" v:"required|电价ID不可缺少"`
 }
 
 // ElectricDeleteRateRes

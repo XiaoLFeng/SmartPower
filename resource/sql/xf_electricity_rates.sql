@@ -38,3 +38,6 @@ exec sp_addextendedproperty 'MS_Description', N'修改时间', 'SCHEMA', 'dbo', 
      'updated_at'
 go
 
+create unique index xf_electricity_rates_period_at_uindex
+    on xf_electricity_rates (period_at)
+go

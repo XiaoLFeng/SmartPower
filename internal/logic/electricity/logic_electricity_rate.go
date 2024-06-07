@@ -32,7 +32,7 @@ func (s *sElectric) RateAdd(ctx context.Context, valley float64, peak float64, t
 	glog.Debugf(ctx, "获取到的年月: %s", getYearMonth)
 	// 检查指定年月是否创建
 	var checkRate *entity.XfElectricityRates
-	err = dao.XfElectricityRates.Ctx(ctx).Where(do.XfElectricityRates{PeriodAt: &timer}).Scan(&checkRate)
+	err = dao.XfElectricityRates.Ctx(ctx).Where(do.XfElectricityRates{PeriodAt: getYearMonth}).Scan(&checkRate)
 	if err != nil {
 		return berror.NewErrorHasError(bcode.ServerInternalError, err)
 	}

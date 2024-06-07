@@ -26,5 +26,5 @@ func GetAdminRoleUUID() string {
 // # 返回:
 //   - string: 用户角色UUID
 func GetUserRoleUUID() string {
-	return uuid.UUID(md5.Sum([]byte("duser"))).String()
+	return uuid.UUID(md5.Sum([]byte("user"))).String()
 }

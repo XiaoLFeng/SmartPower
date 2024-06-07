@@ -44,6 +44,12 @@ func (s *sAuth) AuthLogin(ctx context.Context, user string, password string) (dU
 	}
 	// 对用户进行密码验证
 	if util.VerifyPassword(getUser.Password, password) {
+		// 获取用户所在角色名字
+		var getRole *entity.XfRole
+		err := dao.XfRole.Ctx(ctx).Where(do.XfRole{Ruuid: getUser.Role}).Scan(&getRole)
+		if err != nil {
+			return nil, berror.NewErrorHasError(bcode.ServerInternalError, err)
+		}
 		// 生成令牌
 		tUUID, _ := uuid.NewV7()
 		tokenUUID, _ := uuid.NewV7()
@@ -62,7 +68,7 @@ func (s *sAuth) AuthLogin(ctx context.Context, user string, password string) (dU
 					Username: getUser.Username,
 					Email:    getUser.Email,
 					Phone:    getUser.Phone,
-					Role:     getUser.Role,
+					Role:     getRole.Name,
 				},
 				Token: tokenUUID.String(),
 			}

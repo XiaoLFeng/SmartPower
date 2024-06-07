@@ -43,13 +43,19 @@ func (s *sUser) GetUserCurrent(ctx context.Context) (getUser *duser.UserDetailed
 		if err != nil {
 			return nil, berror.NewErrorHasError(bcode.ServerInternalError, err)
 		} else {
+			// 获取角色
+			var getRole *entity.XfRole
+			err := dao.XfRole.Ctx(ctx).Where(do.XfRole{Ruuid: userInfo.Role}).Scan(&getRole)
+			if err != nil {
+				return nil, berror.NewErrorHasError(bcode.ServerInternalError, err)
+			}
 			getUser := &duser.UserDetailed{
 				User: duser.DUser{
 					Uuid:     userInfo.Uuid,
 					Username: userInfo.Username,
 					Email:    userInfo.Email,
 					Phone:    userInfo.Phone,
-					Role:     userInfo.Role,
+					Role:     getRole.Name,
 				},
 			}
 			if getCompany != nil {
