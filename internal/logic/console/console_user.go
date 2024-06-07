@@ -4,6 +4,7 @@ import (
 	v1 "SmartPower/api/console/v1"
 	"SmartPower/internal/dao"
 	"SmartPower/internal/model/do"
+	"SmartPower/internal/model/dto/dcompany"
 	"SmartPower/internal/model/dto/duser"
 	"SmartPower/internal/model/entity"
 	"SmartPower/internal/util"
@@ -255,4 +256,63 @@ func (s *sConsole) UserEdit(ctx context.Context, getData *v1.ConsoleUserEditReq)
 		}
 	}
 	return nil
+}
+
+// UserGetList
+//
+// # 获取用户列表
+//
+// 获取用户列表接口, 用于获取用户列表. 用户在这里可以进行获取用户列表，获取用户列表的时候需要用户提供用户列表的信息，获取成功后会返回获取成功的信息.
+//
+// # 参数:
+//   - ctx: context.Context, 上下文
+//
+// # 返回:
+//   - userDetail: []*duser.UserDetailed, 用户详细信息
+//   - err: error, 错误
+func (s *sConsole) UserGetList(ctx context.Context) (userDetail []*duser.UserDetailed, err error) {
+	g.Log().Noticef(ctx, "[LOGIC] 执行 UserGetList | 获取用户列表")
+	// 获取用户列表
+	var getUserList []*entity.XfUser
+	err = dao.XfUser.Ctx(ctx).Scan(&getUserList)
+	if err != nil {
+		return nil, berror.NewErrorHasError(bcode.ServerInternalError, err)
+	}
+	getUserDetailedList := new([]*duser.UserDetailed)
+	// 根据用户列表获取公司信息
+	for _, user := range getUserList {
+		ranCompany := new(dcompany.DCompany)
+		if user.Role != util.GetAdminRoleUUID() {
+			var getCompany *entity.XfCompanies
+			err = dao.XfCompanies.Ctx(ctx).Where(do.XfCompanies{Uuid: user.Uuid}).Scan(&getCompany)
+			if err != nil {
+				return nil, berror.NewErrorHasError(bcode.ServerInternalError, err)
+			}
+			if getCompany != nil {
+				ranCompany = &dcompany.DCompany{
+					Cods:           getCompany.Cods,
+					Name:           getCompany.Name,
+					Address:        getCompany.Address,
+					Representative: getCompany.Representative,
+				}
+			}
+		}
+		// 根据角色获取角色名
+		var getRole *entity.XfRole
+		err = dao.XfRole.Ctx(ctx).Where(do.XfRole{Ruuid: user.Role}).Scan(&getRole)
+		if err != nil {
+			return nil, berror.NewErrorHasError(bcode.ServerInternalError, err)
+		}
+		*getUserDetailedList = append(*getUserDetailedList, &duser.UserDetailed{
+			User: duser.DUser{
+				Uuid:     user.Uuid,
+				Username: user.Username,
+				Email:    user.Email,
+				Phone:    user.Phone,
+				Role:     getRole.Name,
+			},
+			Company: *ranCompany,
+		})
+	}
+	return *getUserDetailedList, nil
 }

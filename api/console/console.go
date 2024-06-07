@@ -14,5 +14,6 @@ type IConsoleV1 interface {
 	ConsoleUserAdd(ctx context.Context, req *v1.ConsoleUserAddReq) (res *v1.ConsoleUserAddRes, err error)
 	ConsoleUserDelete(ctx context.Context, req *v1.ConsoleUserDeleteReq) (res *v1.ConsoleUserDeleteRes, err error)
 	ConsoleUserEdit(ctx context.Context, req *v1.ConsoleUserEditReq) (res *v1.ConsoleUserEditRes, err error)
+	ConsoleUserGetList(ctx context.Context, req *v1.ConsoleUserGetListReq) (res *v1.ConsoleUserGetListRes, err error)
 	ConsoleUserResetPassword(ctx context.Context, req *v1.ConsoleUserResetPasswordReq) (res *v1.ConsoleUserResetPasswordRes, err error)
 }

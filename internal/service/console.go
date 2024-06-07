@@ -65,6 +65,7 @@ type (
 		// # 返回:
 		//   - err: error, 错误
 		UserEdit(ctx context.Context, getData *v1.ConsoleUserEditReq) (err error)
+		UserGetList(ctx context.Context) (userDetail []*duser.UserDetailed, err error)
 	}
 )
 
