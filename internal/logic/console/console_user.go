@@ -9,6 +9,7 @@ import (
 	"SmartPower/internal/model/entity"
 	"SmartPower/internal/util"
 	"context"
+	"crypto/md5"
 	"github.com/bamboo-services/bamboo-utils/bcode"
 	"github.com/bamboo-services/bamboo-utils/berror"
 	"github.com/gogf/gf/v2/frame/g"
@@ -151,6 +152,10 @@ func (s *sConsole) UserResetPassword(ctx context.Context, req *v1.ConsoleUserRes
 //   - err: error, 错误
 func (s *sConsole) UserDelete(ctx context.Context, getUUID string) (err error) {
 	g.Log().Noticef(ctx, "[LOGIC] 执行 UserDelete | 删除控制台用户")
+	// 检查是否为超级管理员
+	if getUUID == uuid.UUID(md5.Sum([]byte("SmartPowerSuperConsoleUser"))).String() {
+		return berror.NewError(bcode.OperationFailed, "不能删除超级管理员")
+	}
 	// 检查用户是否存在
 	var getUser *entity.XfUser
 	err = dao.XfUser.Ctx(ctx).Where(do.XfUser{Uuid: getUUID}).Scan(&getUser)
@@ -182,7 +187,6 @@ func (s *sConsole) UserDelete(ctx context.Context, getUUID string) (err error) {
 //   - err: error, 错误
 func (s *sConsole) UserEdit(ctx context.Context, getData *v1.ConsoleUserEditReq) (err error) {
 	g.Log().Noticef(ctx, "[LOGIC] 执行 UserEdit | 编辑控制台用户")
-	// 检查信息是否完备化
 	// 检查信息是否完备化
 	if !getData.IsAdmin {
 		if getData.Company == "" || getData.CompanyCods == "" || getData.CompanyAddress == "" || getData.Representative == "" {
@@ -226,7 +230,13 @@ func (s *sConsole) UserEdit(ctx context.Context, getData *v1.ConsoleUserEditReq)
 		Role:     getRole,
 	}).Where(do.XfUser{Uuid: getData.UUID}).Update()
 	// 如果不是管理员需要编辑公司
-	if !getData.IsAdmin {
+	if getData.IsAdmin {
+		// 如果是管理员则删除公司
+		_, err = dao.XfCompanies.Ctx(ctx).Where(do.XfCompanies{Uuid: getData.UUID}).Delete()
+		if err != nil {
+			return berror.NewErrorHasError(bcode.ServerInternalError, err)
+		}
+	} else {
 		// 检查公司是否存在
 		var getCompany *entity.XfCompanies
 		err = dao.XfCompanies.Ctx(ctx).Where(do.XfCompanies{Uuid: getData.UUID}).Scan(&getCompany)
@@ -243,14 +253,8 @@ func (s *sConsole) UserEdit(ctx context.Context, getData *v1.ConsoleUserEditReq)
 		if getCompany == nil {
 			_, err = getModal.Insert()
 		} else {
-			_, err = getModal.Update()
+			_, err = getModal.Where(do.XfCompanies{Cods: getData.CompanyCods}).Update()
 		}
-		if err != nil {
-			return berror.NewErrorHasError(bcode.ServerInternalError, err)
-		}
-	} else {
-		// 如果是管理员则删除公司
-		_, err = dao.XfCompanies.Ctx(ctx).Where(do.XfCompanies{Uuid: getData.UUID}).Delete()
 		if err != nil {
 			return berror.NewErrorHasError(bcode.ServerInternalError, err)
 		}
@@ -274,7 +278,7 @@ func (s *sConsole) UserGetList(ctx context.Context) (userDetail []*duser.UserDet
 	g.Log().Noticef(ctx, "[LOGIC] 执行 UserGetList | 获取用户列表")
 	// 获取用户列表
 	var getUserList []*entity.XfUser
-	err = dao.XfUser.Ctx(ctx).Scan(&getUserList)
+	err = dao.XfUser.Ctx(ctx).OrderDesc("created_at").Scan(&getUserList)
 	if err != nil {
 		return nil, berror.NewErrorHasError(bcode.ServerInternalError, err)
 	}

@@ -28,7 +28,7 @@ type ConsoleUserEditReq struct {
 	CompanyCods    string `json:"company_cods"`
 	CompanyAddress string `json:"company_address"`
 	Representative string `json:"representative"`
-	IsAdmin        bool   `json:"admin" v:"required#请输入是否为管理员"`
+	IsAdmin        bool   `json:"has_admin" v:"required#请输入是否为管理员" default:"false"`
 }
 
 // ConsoleUserEditRes
