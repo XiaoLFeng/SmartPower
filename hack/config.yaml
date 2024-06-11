@@ -10,3 +10,11 @@ gfcli:
     dao:
       - link: "	mssql:sa:qwerQWER114477@tcp(127.0.0.1:1433)/smart_power"
         jsonCase: "CamelLower"
+  build:
+    name:     "gf"
+    arch:     "arm64"
+    system:   "darwin"
+    packSrc:  "resource,manifest"
+    version:  "v1.0.0"
+    output:   "./bin"
+    extra:    ""
