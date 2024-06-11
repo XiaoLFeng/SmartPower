@@ -1,4 +1,3 @@
-
 # CLI tool, only in development environment.
 # https://goframe.org/pages/viewpage.action?pageId=3673173
 gfcli:
@@ -11,10 +10,10 @@ gfcli:
       - link: "	mssql:sa:qwerQWER114477@tcp(127.0.0.1:1433)/smart_power"
         jsonCase: "CamelLower"
   build:
-    name:     "gf"
-    arch:     "arm64"
-    system:   "darwin"
-    packSrc:  "resource,manifest"
-    version:  "v1.0.0"
-    output:   "./bin"
-    extra:    ""
+    name: "main"
+    arch: "amd64,arm64,arm"
+    system: "darwin,windows,linux"
+    packSrc: "resource/public,resource/sql"
+    packDst: "internal/packed/build_pack_data.go"
+    version: "v1.0.0"
+    path: "./bin"

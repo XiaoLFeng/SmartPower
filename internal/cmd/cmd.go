@@ -49,6 +49,7 @@ var (
 				)
 			})
 			s.AddStaticPath("/assets", "resource/public/assets")
+			s.AddStaticPath("/sql", "resource/sql")
 			s.Run()
 			return nil
 		},

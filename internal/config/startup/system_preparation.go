@@ -3,8 +3,8 @@ package startup
 import (
 	"context"
 	"github.com/gogf/gf/v2/frame/g"
-	"github.com/gogf/gf/v2/os/gfile"
 	"github.com/gogf/gf/v2/os/glog"
+	"github.com/gogf/gf/v2/os/gres"
 	"strings"
 )
 
@@ -42,8 +42,8 @@ func prepareDatabase(ctx context.Context, tableName string) {
 	if result == nil {
 		glog.Noticef(ctx, "[STARTUP] 数据表 %s 缺失，正在创建", tableName)
 		// 读取文件
-		getFileString := gfile.GetContents("resource/sql/" + tableName + ".sql")
-		getContent := strings.Split(getFileString, "go")
+		getFileString := gres.GetContent("resource/sql/" + tableName + ".sql")
+		getContent := strings.Split(string(getFileString), "go")
 		// 数据表不存在创建数据表
 		for _, content := range getContent {
 			_, err := g.DB().Exec(ctx, content)
